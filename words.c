@@ -1,9 +1,19 @@
-//Ce sera un return string renvoyant le mot choisi prenant dans le json
-void random_word(){
+#include <stdio.h>
+#include <string.h>
+#include "jsmn.h"
+
+
+char* random_word() {
     printf(">> Un mot a ete choisi <<\n");
+    char* word = "TEST";
+    return word;
 }
 
-//Fonction pour rendre le mot secret _ _ _ _ _ via sa longueur
-void secret_word(){
-    
+void secret_word(char* word) {
+    int longueur = strlen(word);
+    printf("Le mot secret est : ");
+    for (int i = 0; i < longueur; i++) {
+        printf("_ ");
+    }
+    printf("\n");
 }

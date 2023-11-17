@@ -3,8 +3,8 @@
 
 int main(void) {
     printf(">>> JEU DU PENDU <<<\n");
-
-    random_word();
+    char* motChoisi = random_word();
+    secret_word(motChoisi);    
     return 0;
 }
 
