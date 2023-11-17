@@ -1,4 +1,6 @@
 #ifndef MAIN_H_INCLUDED
 #define MAIN_H_INCLUDED
 
+#define NOMBRES_ESSAIS = 6;
+
 #endif // MAIN_H_INCLUDED
