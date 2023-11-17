@@ -1,8 +1,10 @@
 #include <stdio.h>
 #include "words.c"
+#include "menu.c"
+
+#define NOMBRES_ESSAIS = 6;
 
 int main(void) {
-    printf(">>> JEU DU PENDU <<<\n");
 
     random_word();
     return 0;
