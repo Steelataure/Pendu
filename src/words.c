@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <string.h>
-#include "jsmn.h"
+#include "include/jsmn.h"
 
 
 char* random_word() {
@@ -27,7 +27,7 @@ void secret_word(char* word) {
 
 void user_choice(char* word){
     char choice;
-    int letters_found = 0; 
+    //int letters_found = 0; 
 
     printf("Choisi une lettre \n>");
     scanf("%c", &choice);
