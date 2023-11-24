@@ -11,9 +11,6 @@ void afficherMenu() {
 
 //Affichage du menu des themes
 void afficherThemes() {
-    printf("-----------------------------------\n");
-    printf("           JEU DU PENDU           \n");
-    printf("-----------------------------------\n");
     printf("Avec quel thème souhaitez vous jouer ?\n");
     printf("1. Animaux\n");
     printf("2. Fruits\n");

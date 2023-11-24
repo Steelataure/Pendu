@@ -1,5 +1,3 @@
-#include <stdio.h>
-#include <string.h>
 #include "include/jsmn.h"
 
 
@@ -15,7 +13,6 @@ void secret_word(char* word) {
     for (int i = 0; i < longueur; i++) {
         printf("_ ");
         //A rajouter par la suite
-        // if (letters_found[i]) {
         //     printf("%c ", word[i]);
         // }
         // else{
@@ -27,14 +24,27 @@ void secret_word(char* word) {
 
 void user_choice(char* word){
     char choice;
-    //int letters_found = 0; 
+    int tentatives = 6; 
 
+    int letters_found = 0; 
     printf("Choisi une lettre \n>");
     scanf("%c", &choice);
+    char choiceUpper = toupper(choice);
+    
     int longueur = strlen(word);
+    int pos_letter_found[longueur];
+
     for (int i = 0; i < longueur; i++) {
-        if (word[i] == choice){
+        if (word[i] == choiceUpper){
             printf("Vous avez trouve la lettre %c \n", word[i]);
+            pos_letter_found[letters_found] = i;
+            letters_found++;        
+        }
+        else{
+            tentatives -=1;
         }
     }
+    printf("%d ", pos_letter_found);
+
+    
 }
