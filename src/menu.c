@@ -4,6 +4,7 @@
 
 //Affichage du menu des themes
 void afficherThemes() {
+    
     int reponseThemes;
 
     printf("Avec quel thème souhaitez vous jouer ?\n");
@@ -12,13 +13,13 @@ void afficherThemes() {
     printf("3. Métiers\n");
     printf("4. Pays\n");
     printf("5. Sports\n");
-    printf("6. Revenir en arriere\n");
+    printf("6. Sans themes particulier");
+    printf("7. Revenir en arriere\n");
     scanf("%d", &reponseThemes);
-}
-/*
+
     switch (reponseThemes)
     {
-    case 1:
+    /* case 1:
         Pendu_Animaux();
         break;
     case 2:
@@ -32,8 +33,11 @@ void afficherThemes() {
         break;
     case 5:
         Pendu_Sports();
-        break;
+        break; 
     case 6:
+        Pendu_basique();
+        break; */
+    case 7:
         afficherMenu();
         break;
    default:
@@ -42,7 +46,6 @@ void afficherThemes() {
         break;
     }
 }
-*/
 
 /*
 void Username() {
@@ -69,6 +72,7 @@ void Username() {
 */
 //Affichage du menu principal
 void afficherMenu() {
+
     int reponseMenu;
 
     printf("-----------------------------------\n");

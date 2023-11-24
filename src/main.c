@@ -17,7 +17,8 @@ int main(void) {
     // InitWindow(screenWidth, screenHeight, "Ma fenêtre Raylib");
     // SetTargetFPS(60);  // Définit le nombre d'images par seconde cible
 
-    printf(">>> JEU DU PENDU <<<\n");
+    
+    afficherMenu();
     char* motChoisi = random_word();
     secret_word(motChoisi);    
 
