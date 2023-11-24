@@ -6,7 +6,6 @@
 #include "include/main.h"
 #include "words.c"
 #include "menu.c"
-#include "pendu.c"
 
 
 
@@ -24,7 +23,7 @@ int main(void) {
 
     while (1){
         user_choice(motChoisi);
-        pendu(tentatives);
+        //pendu(tentatives);
     }
     return 0;
 }       
