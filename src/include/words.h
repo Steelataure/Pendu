@@ -1,6 +1,6 @@
-#ifndef MAIN_H_INCLUDED
-#define MAIN_H_INCLUDED
+#ifndef WORDS_H_INCLUDED
+#define WORDS_H_INCLUDED
 
-char* random_word();
-void secret_word(char word);
-#endif // MAIN_H_INCLUDED
+const char* random_word(const char* theme);
+
+#endif

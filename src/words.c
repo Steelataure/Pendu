@@ -1,50 +1,42 @@
-#include "include/jsmn.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+const char* animaux[] = {"lion", "elephant", "girafe", "tigre", "singe"};
+const char* fruits[] = {"pomme", "banane", "fraise", "kiwi", "orange"};
+const char* pays[] = {"France", "Etats-Unis", "Japon", "Bresil", "Australie"};
+const char* metiers[] = {"medecin", "infirmier", "professeur", "architecte", "informaticien"};
+const char* sports[] = {"football", "basketball", "tennis", "natation", "golf"};
+const char* couleurs[] = {"rouge", "vert", "bleu", "jaune", "noir"};
 
-char* random_word() {
-    printf(">> Un mot a ete choisi <<\n");
-    char* word = "TEST";
-    return word;
-}
+const char* random_word(const char* theme) {
+    const char** word_array = NULL;
+    int array_size = 0;
 
-void secret_word(char* word) {
-    int longueur = strlen(word);
-    printf("Le mot secret est : ");
-    for (int i = 0; i < longueur; i++) {
-        printf("_ ");
-        //A rajouter par la suite
-        //     printf("%c ", word[i]);
-        // }
-        // else{
-        //     printf("_ ");
-        // }
+    if (strcmp(theme, "animaux") == 0) {
+        word_array = animaux;
+        array_size = sizeof(animaux) / sizeof(animaux[0]);
+    } else if (strcmp(theme, "fruits") == 0) {
+        word_array = fruits;
+        array_size = sizeof(fruits) / sizeof(fruits[0]);
+    } else if (strcmp(theme, "pays") == 0) {
+        word_array = pays;
+        array_size = sizeof(pays) / sizeof(pays[0]);
+    } else if (strcmp(theme, "metiers") == 0) {
+        word_array = metiers;
+        array_size = sizeof(metiers) / sizeof(metiers[0]);
+    } else if (strcmp(theme, "sports") == 0) {
+        word_array = sports;
+        array_size = sizeof(sports) / sizeof(sports[0]);
+    } else if (strcmp(theme, "couleurs") == 0) {
+        word_array = couleurs;
+        array_size = sizeof(couleurs) / sizeof(couleurs[0]);
+    } else {
+        fprintf(stderr, "Theme non trouve\n");
+        exit(EXIT_FAILURE);
     }
-    printf("\n");
-}
 
-void user_choice(char* word){
-    char choice;
-    int tentatives = 6; 
+    int random_index = rand() % array_size;
 
-    int letters_found = 0; 
-    printf("Choisi une lettre \n>");
-    scanf("%c", &choice);
-    char choiceUpper = toupper(choice);
-    
-    int longueur = strlen(word);
-    int pos_letter_found[longueur];
-
-    for (int i = 0; i < longueur; i++) {
-        if (word[i] == choiceUpper){
-            printf("Vous avez trouve la lettre %c \n", word[i]);
-            pos_letter_found[letters_found] = i;
-            letters_found++;        
-        }
-        else{
-            tentatives -=1;
-        }
-    }
-    printf("%d ", pos_letter_found);
-
-    
+    return word_array[random_index];
 }

@@ -1,104 +1,63 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "include/menu.h"
+#include "include/words.h"
 
-
-//Affichage du menu des themes
-void afficherThemes() {
-    
-    int reponseThemes;
-
-    printf("Avec quel thème souhaitez vous jouer ?\n");
+const char* afficherMenu() {
+    printf("Bienvenue dans le jeu du Pendu !\n");
+    printf("Choisissez un theme :\n");
     printf("1. Animaux\n");
     printf("2. Fruits\n");
-    printf("3. Métiers\n");
-    printf("4. Pays\n");
+    printf("3. Pays\n");
+    printf("4. Metiers\n");
     printf("5. Sports\n");
-    printf("6. Sans themes particulier");
-    printf("7. Revenir en arriere\n");
-    scanf("%d", &reponseThemes);
+    printf("6. Couleurs\n");
 
-    switch (reponseThemes)
-    {
-    /* case 1:
-        Pendu_Animaux();
-        break;
-    case 2:
-        Pendu_Fruits();
-        break;
-    case 3:
-        Pendu_Metiers();
-        break;
-    case 4:
-        Pendu_Pays();
-        break;
-    case 5:
-        Pendu_Sports();
-        break; 
-    case 6:
-        Pendu_basique();
-        break; */
-    case 7:
-        afficherMenu();
-        break;
-   default:
-        printf("Cela ne fait pas partir des choix disponible veuillez reessayer");
-        afficherThemes();
-        break;
+    int choixTheme;
+    scanf("%d", &choixTheme);
+
+    const char* theme;
+    switch (choixTheme) {
+        case 1:
+            theme = "animaux";
+            break;
+        case 2:
+            theme = "fruits";
+            break;
+        case 3:
+            theme = "pays";
+            break;
+        case 4:
+            theme = "métiers";
+            break;
+        case 5:
+            theme = "sports";
+            break;
+        case 6:
+            theme = "couleurs";
+            break;
+
+        default:
+            fprintf(stderr, "Theme non valide. Choisissez un thème existant.\n");
+            exit(EXIT_FAILURE);
     }
+
+    return theme;
 }
 
-/*
-void Username() {
+int choisirTheme() {
+    // Affiche le menu et récupère le choix du thème
+    printf("Choisissez un theme :\n");
+    printf("1. Animaux\n");
+    printf("2. Fruits\n");
+    printf("3. Pays\n");
+    printf("4. Metiers\n");
+    printf("5. Sports\n");
+    printf("6. Couleurs\n");
 
-    char Username;
-    char confirmation_Username;
+    int choixTheme;
+    scanf("%d", &choixTheme);
 
-    printf("Veuillez entrer votre nom d'utilisateur");
-    scanf("%c", &Username);
-
-    printf("Votre nom d'utilisateur est bien : %c ? Y/N", Username);
-
-    if (confirmation_Username == 'Y') {
-
-    
-    } 
-    
-    else if (confirmation_Username == 'N') {
-
-        Username();
-
-    }   
-}
-*/
-//Affichage du menu principal
-void afficherMenu() {
-
-    int reponseMenu;
-
-    printf("-----------------------------------\n");
-    printf("           JEU DU PENDU           \n");
-    printf("-----------------------------------\n");
-    printf("Veuillez choisir ce que vous souhaitez :\n");
-    printf("1. Nouvelle Partie\n");
-    printf("2. Classement\n");
-    printf("3. Quitter\n");
-
-    // Lire la réponse de l'utilisateur
-    scanf("%d", &reponseMenu);
-
-    switch (reponseMenu)
-    {
-    case 1:
-        afficherThemes();
-        break;
-    /* case 2:
-        afficherClassement(); 
-        break; */
-    case 3: 
-        exit(1);
-    default:
-        printf("Cela ne fait pas partie des choix disponibles. Veuillez réessayer.\n");
-        afficherMenu();
-        break;
-    }
+    return choixTheme;
 }

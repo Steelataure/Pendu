@@ -1,0 +1,8 @@
+{
+    "animaux": ["lion", "éléphant", "girafe", "tigre", "singe", "cheval", "chien", "chat", "crocodile", "serpent", "panda", "koala", "hippopotame", "écureuil", "pingouin", "phoque", "lézard", "perroquet", "chimpanzé", "kangourou"],
+    "fruits": ["pomme", "banane", "fraise", "kiwi", "orange", "raisin", "mangue", "ananas", "pêche", "cerise", "abricot", "poire", "pastèque", "melon", "framboise", "myrtille", "pamplemousse", "grenade", "figue", "prune"],
+    "pays": ["France", "États-Unis", "Japon", "Brésil", "Australie", "Canada", "Inde", "Allemagne", "Italie", "Mexique", "Chine", "Russie", "Espagne", "Argentine", "Afrique du Sud", "Nigeria", "Indonésie", "Turquie", "Suède", "Norvège"],
+    "métiers": ["médecin", "infirmier", "professeur", "architecte", "informaticien", "pompier", "plombier", "avocat", "boulanger", "artiste", "photographe", "ingénieur", "psychologue", "journaliste", "électricien", "pilote", "vétérinaire", "agriculteur", "coiffeur", "astronome"],
+    "sports": ["football", "basketball", "tennis", "natation", "golf", "athlétisme", "volleyball", "rugby", "cyclisme", "boxe", "escrime", "haltérophilie", "plongée", "ski", "surf", "badminton", "escrime", "gymnastique", "course automobile", "tennis de table"]
+  }
+  
