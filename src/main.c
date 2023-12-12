@@ -7,10 +7,21 @@
 
 void afficherMotCache(const char* motSecret, const char* lettresTrouvees);
 void afficherPendu(int essaisRestants);
+int soloOrDuo(void);
+const char* choice_word(void);
 
 int main(void) {
-    const char* theme = afficherMenu();
-    const char* motSecret = random_word(theme);
+    const char* theme;
+    const char* motSecret;
+
+    if (soloOrDuo() == 1){
+        printf(">>> MODE SOLO <<<\n");
+        theme = afficherMenu();
+        motSecret = random_word(theme);
+    }
+    else{
+        motSecret = choice_word();
+    }
 
     char lettresTrouvees[50];
     memset(lettresTrouvees, '_', strlen(motSecret));
@@ -54,6 +65,25 @@ int main(void) {
 
     return 0;
 }
+
+int soloOrDuo(){
+    int choice;
+    printf("QUEL MODE ?\n");
+    printf("1. SOLO \n");
+    printf("2. 2 JOUEURS \n>");
+    scanf("%d", &choice);
+    if (choice <= 2){
+        return choice;
+    }
+}
+
+const char* choice_word() {
+    char word[50];
+    printf("Quel mot choisis-tu ?\n");
+    scanf("%s", word);
+    return strdup(word);
+}
+
 
 void afficherMotCache(const char* motSecret, const char* lettresTrouvees) {
     for (int i = 0; i < strlen(motSecret); i++) {

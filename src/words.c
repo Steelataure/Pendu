@@ -2,12 +2,12 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char* animaux[] = {"lion", "elephant", "girafe", "tigre", "singe"};
+const char* animaux[] = {"lion", "elephant", "girafe", "tigre", "singe", "chien"};
 const char* fruits[] = {"pomme", "banane", "fraise", "kiwi", "orange"};
 const char* pays[] = {"France", "Etats-Unis", "Japon", "Bresil", "Australie"};
 const char* metiers[] = {"medecin", "infirmier", "professeur", "architecte", "informaticien"};
 const char* sports[] = {"football", "basketball", "tennis", "natation", "golf"};
-const char* couleurs[] = {"rouge", "vert", "bleu", "jaune", "noir"};
+const char* couleurs[] = {"rouge", "vert", "bleu", "jaune", "noir", "rose", "marron"};
 
 const char* random_word(const char* theme) {
     const char** word_array = NULL;
@@ -40,3 +40,4 @@ const char* random_word(const char* theme) {
 
     return word_array[random_index];
 }
+
