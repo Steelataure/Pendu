@@ -61,3 +61,13 @@ int choisirTheme() {
 
     return choixTheme;
 }
+
+int choisirNiveau() {
+    int choixNiveau;
+    printf("Choisissez un niveau :\n");
+    printf("1. Niveau Facile\n");
+    printf("2. Niveau Intermédiaire\n");
+    printf("3. Niveau Difficile\n");
+    scanf("%d", &choixNiveau);
+    return choixNiveau;
+}

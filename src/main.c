@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include "include/raylib.h"
 #include "include/menu.h"
 #include "include/words.h"
 
@@ -16,12 +17,14 @@ int main(void) {
 
     if (soloOrDuo() == 1){
         printf(">>> MODE SOLO <<<\n");
+        int choix_niveau = choisirNiveau();
         theme = afficherMenu();
-        motSecret = random_word(theme);
+        motSecret = random_word(theme, choix_niveau);
     }
     else{
         motSecret = choice_word();
     }
+
 
     char lettresTrouvees[50];
     memset(lettresTrouvees, '_', strlen(motSecret));
@@ -30,7 +33,6 @@ int main(void) {
     int essaisRestants = 6;
     while (essaisRestants > 0) {
         afficherPendu(6 - essaisRestants);
-
         afficherMotCache(motSecret, lettresTrouvees);
 
         printf("Saisissez une lettre : ");
@@ -62,7 +64,6 @@ int main(void) {
             }
         }
     }
-
     return 0;
 }
 

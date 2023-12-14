@@ -3,5 +3,6 @@
 
 const char* afficherMenu();
 int choisirTheme();
+int choisirNiveau();
 
 #endif // MENU_H_INCLUDED
