@@ -45,6 +45,11 @@ int main(void) {
     difficultyBackgroundTexture = LoadTextureFromImage(difficultyBackground);
     UnloadImage(difficultyBackground);
 
+    // Chargement de la musique
+    InitAudioDevice();
+    IsAudioDeviceReady();
+    Music musique = LoadMusicStream("assets/Sandstorm-_8-Bit-NES-Remix_.mp3");
+
     // Placement des boutons page MENU
     int buttonWidth = 200;
     int buttonSpacing = 20; // Espace entre les boutons
@@ -67,6 +72,8 @@ int main(void) {
         switch (gameState) {
             case MAIN_MENU:
                 DrawMainMenu();
+                PlayMusicStream(musique);
+                UpdateMusicStream(musique);
                 break;
             case NEW_GAME:
                 DrawNewGame();
@@ -87,7 +94,9 @@ int main(void) {
     UnloadTexture(creditsBackgroundTexture);
     UnloadTexture(rulesBackgroundTexture);
     UnloadTexture(difficultyBackgroundTexture);
+    UnloadMusicStream(musique);
 
+    CloseAudioDevice();
     CloseWindow();
 
     return 0;
