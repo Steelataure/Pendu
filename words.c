@@ -9,19 +9,10 @@ const char* metiers[] = {"medecin", "infirmier", "professeur", "architecte", "in
 const char* sports[] = {"football", "basketball", "tennis", "natation", "golf"};
 const char* couleurs[] = {"rouge", "vert", "bleu", "jaune", "noir", "rose", "marron"};
 
-const char* random_word(const char* theme, int niveau) {
+const char* random_word(const char* theme) {
     const char** word_array = NULL;
     int array_size = 0;
-/**/
-    if (niveau == 1) {
-        printf("Niveau 1\n");
-    } 
-    else if (niveau == 2) {
-        printf("Niveau 2\n");
-    }
-    else if (niveau == 3) {
-        printf("Niveau 3\n");
-    }
+
     
     if (strcmp(theme, "animaux") == 0) {
         word_array = animaux;
