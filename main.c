@@ -55,7 +55,7 @@ int main(void) {
 
     // Chargement de l'image de fond des thèmes
     Image themesBackground = LoadImage("assets/niveaux.png");
-    themesBackgroundTexture = LoadTextureFromImage(themesBackground);
+    themesBackgroundTexture = difficultyBackgroundTexture;
     UnloadImage(themesBackground);
 
     // Chargement de la musique
@@ -81,18 +81,18 @@ int main(void) {
     difficultButtonBounds = (Rectangle){intermediateButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 30, buttonWidth, 50};
 
     // Placement des boutons page THEMES
-    int buttonWidthbis = 200;
+    int buttonWidthbis = 100;
     int buttonSpacingbis = 20;
 
 
 // Centre les boutons de la page "Themes"
-    int totalbisButtonsWidth = 6 * buttonWidthbis + 1 * buttonSpacingbis; // Largeur totale des six boutons et deux espaces entre eux
+    int totalbisButtonsWidth = 1 * buttonWidthbis + 1 * buttonSpacingbis; // Largeur totale des six boutons et deux espaces entre eux
     animalsButtonBounds = (Rectangle){(screenWidth - totalbisButtonsWidth) / 2, screenHeight / 2 - 30, buttonWidthbis, 50};
-    fruitsButtonBounds = (Rectangle){animalsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    countryButtonBounds = (Rectangle){fruitsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    workButtonBounds = (Rectangle){countryButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    sportsButtonBounds = (Rectangle){workButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    colorsButtonsBounds = (Rectangle){sportsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50}; 
+    // fruitsButtonBounds = (Rectangle){animalsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
+    // countryButtonBounds = (Rectangle){fruitsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
+    // workButtonBounds = (Rectangle){countryButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
+    // sportsButtonBounds = (Rectangle){workButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
+    // colorsButtonsBounds = (Rectangle){sportsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50}; 
 
     while (!WindowShouldClose()) {
         switch (gameState) {
@@ -100,17 +100,14 @@ int main(void) {
                 DrawMainMenu();
                 PlayMusicStream(musique);
                 UpdateMusicStream(musique);
-                if ( gameState == THEMES ) { // Si l'utilisateur choisis un niveau de difficulté
-                    DrawThemes();
-                }
-                else {
-                    DrawMainMenu();
-                }
                 break;
             case NEW_GAME:
                 DrawNewGame();
                 PlayMusicStream(musique);
                 UpdateMusicStream(musique);
+                // if ( gameState == THEMES ) { // Si l'utilisateur choisis un niveau de difficulté
+                //     DrawThemes();
+                // }
                 break;
             case CREDITS:
                 DrawCredits();
@@ -212,7 +209,7 @@ void DrawNewGame(void) {
     if (CheckCollisionPointRec(GetMousePosition(), easyButtonBounds)) {
         DrawRectangleLinesEx(easyButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
+            // gameState = THEMES;
         }
     }
 
@@ -224,7 +221,7 @@ void DrawNewGame(void) {
     if (CheckCollisionPointRec(GetMousePosition(), intermediateButtonBounds)) {
         DrawRectangleLinesEx(intermediateButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
+            // gameState = THEMES;
         }
     }
 
@@ -286,6 +283,7 @@ void DrawCredits(void) {
 
 
 
+
 // Fonction de la page "Règles du jeu"
 void DrawRules(void) {
     if (rulesWindow) {
@@ -311,7 +309,7 @@ void DrawRules(void) {
     }
 }
 
-
+//Fonction de la page Themes
 void DrawThemes(void) {
     BeginDrawing();
 
@@ -328,81 +326,88 @@ void DrawThemes(void) {
     if (CheckCollisionPointRec(GetMousePosition(), animalsButtonBounds)) {
         DrawRectangleLinesEx(animalsButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            return "animaux";
             // Mettre ici l'affichage du pendu selon Animaux
         }
     }
 
-    // Affichage du bouton fruits
-    DrawRectangleRec(fruitsButtonBounds, BROWN);
-    DrawText("Fruits", (int)(fruitsButtonBounds.x + fruitsButtonBounds.width / 2 - MeasureText("Fruits", 20) / 2), (int)(fruitsButtonBounds.y + 15), 20, BLACK);
+    // // Affichage du bouton fruits
+    // DrawRectangleRec(fruitsButtonBounds, BROWN);
+    // DrawText("Fruits", (int)(fruitsButtonBounds.x + fruitsButtonBounds.width / 2 - MeasureText("Fruits", 20) / 2), (int)(fruitsButtonBounds.y + 15), 20, BLACK);
 
-    //Pointeur du bouton "Fruits"
-    if (CheckCollisionPointRec(GetMousePosition(), fruitsButtonBounds)) {
-        DrawRectangleLinesEx(fruitsButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici l'affichage du pendu selon Fruits
-        }
-    }
+    // //Pointeur du bouton "Fruits"
+    // if (CheckCollisionPointRec(GetMousePosition(), fruitsButtonBounds)) {
+    //     DrawRectangleLinesEx(fruitsButtonBounds, 2, WHITE);
+    //     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    //         return "fruits";
+    //         // Mettre ici l'affichage du pendu selon Fruits
+    //     }
+    // }
 
-    // Affichage du bouton pays
-    DrawRectangleRec(countryButtonBounds, BROWN);
-    DrawText("Pays", (int)(countryButtonBounds.x + countryButtonBounds.width / 2 - MeasureText("Pays", 20) / 2), (int)(countryButtonBounds.y + 15), 20, BLACK);
+    // // Affichage du bouton pays
+    // DrawRectangleRec(countryButtonBounds, BROWN);
+    // DrawText("Pays", (int)(countryButtonBounds.x + countryButtonBounds.width / 2 - MeasureText("Pays", 20) / 2), (int)(countryButtonBounds.y + 15), 20, BLACK);
 
-    //Pointeur du bouton "Pays"
-    if (CheckCollisionPointRec(GetMousePosition(), countryButtonBounds)) {
-        DrawRectangleLinesEx(countryButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici l'affichage du pendu selon Pays
-        }
-    }
+    // //Pointeur du bouton "Pays"
+    // if (CheckCollisionPointRec(GetMousePosition(), countryButtonBounds)) {
+    //     DrawRectangleLinesEx(countryButtonBounds, 2, WHITE);
+    //     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    //         return "pays";
 
-    // Affichage du bouton métiers
-    DrawRectangleRec(workButtonBounds, BROWN);
-    DrawText("Métiers", (int)(workButtonBounds.x + workButtonBounds.width / 2 - MeasureText("Métiers", 20) / 2), (int)(workButtonBounds.y + 15), 20, BLACK);
+    //         // Mettre ici l'affichage du pendu selon Pays
+    //     }
+    // }
 
-    //Pointeur du bouton "métiers"
-    if (CheckCollisionPointRec(GetMousePosition(), workButtonBounds)) {
-        DrawRectangleLinesEx(workButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici l'affichage du pendu selon métiers
-        }
-    }
+    // // Affichage du bouton métiers
+    // DrawRectangleRec(workButtonBounds, BROWN);
+    // DrawText("Métiers", (int)(workButtonBounds.x + workButtonBounds.width / 2 - MeasureText("Métiers", 20) / 2), (int)(workButtonBounds.y + 15), 20, BLACK);
 
-    // Affichage du bouton Sports
-    DrawRectangleRec(sportsButtonBounds, BROWN);
-    DrawText("Sports", (int)(sportsButtonBounds.x + sportsButtonBounds.width / 2 - MeasureText("Sports", 20) / 2), (int)(sportsButtonBounds.y + 15), 20, BLACK);
+    // //Pointeur du bouton "métiers"
+    // if (CheckCollisionPointRec(GetMousePosition(), workButtonBounds)) {
+    //     DrawRectangleLinesEx(workButtonBounds, 2, WHITE);
+    //     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    //         return "metiers";
+    //         // Mettre ici l'affichage du pendu selon métiers
+    //     }
+    // }
 
-    //Pointeur du bouton "sports"
-    if (CheckCollisionPointRec(GetMousePosition(), sportsButtonBounds)) {
-        DrawRectangleLinesEx(sportsButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici l'affichage du pendu selon sports
-        }
-    }
+    // // Affichage du bouton Sports
+    // DrawRectangleRec(sportsButtonBounds, BROWN);
+    // DrawText("Sports", (int)(sportsButtonBounds.x + sportsButtonBounds.width / 2 - MeasureText("Sports", 20) / 2), (int)(sportsButtonBounds.y + 15), 20, BLACK);
 
-    // Affichage du bouton couleurs
-    DrawRectangleRec(colorsButtonsBounds, BROWN);
-    DrawText("Couleurs", (int)(colorsButtonsBounds.x + colorsButtonsBounds.width / 2 - MeasureText("Couleurs", 20) / 2), (int)(colorsButtonsBounds.y + 15), 20, BLACK);
+    // //Pointeur du bouton "sports"
+    // if (CheckCollisionPointRec(GetMousePosition(), sportsButtonBounds)) {
+    //     DrawRectangleLinesEx(sportsButtonBounds, 2, WHITE);
+    //     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    //         return "sports";
+    //         // Mettre ici l'affichage du pendu selon sports
+    //     }
+    // }
 
-    //Pointeur du bouton "Couleurs"
-    if (CheckCollisionPointRec(GetMousePosition(), colorsButtonsBounds)) {
-        DrawRectangleLinesEx(colorsButtonsBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici l'affichage du pendu selon Couleurs
-        }
-    }
+    // // Affichage du bouton couleurs
+    // DrawRectangleRec(colorsButtonsBounds, BROWN);
+    // DrawText("Couleurs", (int)(colorsButtonsBounds.x + colorsButtonsBounds.width / 2 - MeasureText("Couleurs", 20) / 2), (int)(colorsButtonsBounds.y + 15), 20, BLACK);
 
-    // Affichage du bouton "Retour"
-    DrawRectangleRec(backButtonBounds, BROWN);
-    DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
+    // //Pointeur du bouton "Couleurs"
+    // if (CheckCollisionPointRec(GetMousePosition(), colorsButtonsBounds)) {
+    //     DrawRectangleLinesEx(colorsButtonsBounds, 2, WHITE);
+    //     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    //         return "couleur";
+    //         // Mettre ici l'affichage du pendu selon Couleurs
+    //     }
+    // }
 
-    // Pointeur du bouton "Retour"
-    if (CheckCollisionPointRec(GetMousePosition(), backButtonBounds)) {
-        DrawRectangleLinesEx(backButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = NEW_GAME;
-        }
-    }
+    // // Affichage du bouton "Retour"
+    // DrawRectangleRec(backButtonBounds, BROWN);
+    // DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
+
+    // // Pointeur du bouton "Retour"
+    // if (CheckCollisionPointRec(GetMousePosition(), backButtonBounds)) {
+    //     DrawRectangleLinesEx(backButtonBounds, 2, WHITE);
+    //     if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+    //         gameState = NEW_GAME;
+    //     }
+    // }
 
     EndDrawing();
 }
