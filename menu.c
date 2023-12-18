@@ -6,6 +6,13 @@
 
 const char* afficherMenu() {
     printf("Bienvenue dans le jeu du Pendu !\n");
+    printf("Choisissez le mode de difficulte :\n");
+    printf("1. Facile\n");
+    printf("2. Difficile\n");
+    
+    int choixDifficulte;
+    scanf("%d", &choixDifficulte);
+    
     printf("Choisissez un theme :\n");
     printf("1. Animaux\n");
     printf("2. Fruits\n");

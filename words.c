@@ -35,7 +35,11 @@ const char* random_word(const char* theme) {
         fprintf(stderr, "Theme non trouve\n");
         exit(EXIT_FAILURE);
     }
-
+    for (int i = 0; i < array_size; ++i) {
+        if ((strlen(word_array[i]) < 6 && strlen(word_array[0]) < 6) || (strlen(word_array[i]) >= 6 && strlen(word_array[0]) >= 6)) {
+            printf("%s\n", word_array[i]);
+        }
+    }
     int random_index = rand() % array_size;
 
     return word_array[random_index];
