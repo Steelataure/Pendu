@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 typedef enum { MAIN_MENU, LEVELS, GAME, CREDITS, RULES, THEMES} GameState;
 
@@ -41,7 +42,9 @@ void DrawCredits(void);
 void DrawRules(void);
 void DrawJeu(void);
 const char* DrawThemes();
-void HandleTextInput(void);
+char HandleTextInput(void);
+bool partieTerminee = false;
+
 int main(void) {
     // Initialisation de la fenêtre
     InitWindow(800, 600, "Pendu");
@@ -157,7 +160,11 @@ int main(void) {
     return 0;
 }
 
+static const char* motSecret = NULL;
 
+char lettresCorrectes[26]; // Tableau pour stocker les lettres correctes (26 lettres de l'alphabet)
+char lettresIncorrectes[26]; // Tableau pour stocker les lettres incorrectes
+int essaisRestants = 6; // Vous pouvez ajuster cela selon le nombre d'essais que vous voulez accorder
 
 void DrawJeu(void) {
     BeginDrawing();
@@ -165,7 +172,6 @@ void DrawJeu(void) {
     ClearBackground(customColor);
 
     static bool motSecretChoisi = false;
-    static const char* motSecret = NULL;
 
     if (!motSecretChoisi) {
         // Choisissez le mot secret
@@ -180,44 +186,74 @@ void DrawJeu(void) {
         // Dessinez le mot caché
         DrawText("Mot caché :", 100, 50, 20, BLACK);
         for (int i = 0; i < strlen(motSecret); i++) {
-            if (motSecret[i] == ' ') {
+            char lettre = motSecret[i];
+
+            if (lettre == ' ') {
                 DrawText(" ", 100 + i * 30, 120, 20, BLACK);
+            } else if (strchr(lettresCorrectes, lettre) != NULL) {
+                // La lettre est correcte, ajoutez-la au tableau des lettres correctes
+                DrawText(&lettre, 100 + i * 30, 120, 20, BLACK);
             } else {
+                // La lettre n'est pas correcte, affichez un trait souligné
                 DrawText("_", 100 + i * 30, 120, 20, BLACK);
             }
         }
+
         // Dessinez les lettres déjà devinées
         DrawText("Lettres devinées :", 100, 180, 20, BLACK);
-        //DrawText(motSecret, 100, 100, 30, BLACK);
-        //DrawText(motSecret, 30, 80, 20, BLACK);
-    }
-    HandleTextInput();
+        DrawText(lettresCorrectes, 100, 210, 20, BLACK);
+        DrawText(lettresIncorrectes, 100, 240, 20, BLACK);
 
+        // Dessinez le nombre d'essais restants
+        DrawText(TextFormat("Essais restants : %d", essaisRestants), 100, 270, 20, BLACK);
+        if (essaisRestants == 0){
+            DrawText("PERDU", 500, 240, 20, BLACK);
+        }
+    }
+
+    HandleTextInput();
     EndDrawing();
 }
 
-// Déclarations de variables globales
-char input_lettre[64] = "";
+char input_lettre[2] = ""; // Modifiez la taille du tableau à 2 pour un seul caractère
 bool inputName = false;
 
-// Fonction pour gérer la saisie de texte
-void HandleTextInput(void) {
-    DrawText("Entrez une lettre : ", 100, 300, 20, BLACK);
-    DrawRectangleLines(100, 330, 200, 40, BLACK);
+char HandleTextInput(void) {
+    DrawText("Entrez une lettre et appuyez sur Entrée : ", 100, 300, 20, BLACK);
+    DrawRectangleLines(100, 330, 40, 40, BLACK);
     DrawText(input_lettre, 110, 340, 20, BLACK);
 
-    // Obtenez la saisie du clavier
     int key = GetKeyPressed();
     if (key != 0) {
-        int length = strlen(input_lettre);
-        if (key == KEY_BACKSPACE && length > 0) {
-            input_lettre[length - 1] = '\0'; // Supprimez le dernier caractère
-        } else if (length < sizeof(input_lettre) - 1) {
-            input_lettre[length] = (char)key; // Ajoutez le caractère
-            input_lettre[length + 1] = '\0';   // Assurez-vous de terminer la chaîne
+        if (key == KEY_BACKSPACE && input_lettre[0] != '\0') {
+            input_lettre[0] = '\0';
+        } else if ((key >= KEY_A && key <= KEY_Z) || (key >= KEY_ZERO && key <= KEY_NINE)) {
+            // Convertir la lettre en minuscule avant de l'ajouter
+            input_lettre[0] = (char)tolower(key);
+            input_lettre[1] = '\0';
+
+            // Convertir le mot secret en minuscules
+            char motSecretLower[strlen(motSecret) + 1];
+            strcpy(motSecretLower, motSecret);
+            strlwr(motSecretLower);
+
+            // Vérifier si la lettre est dans le mot secret
+            if (strchr(motSecretLower, input_lettre[0]) != NULL) {
+                strncat(lettresCorrectes, input_lettre, 1);
+            } else {
+                strncat(lettresIncorrectes, input_lettre, 1);
+                essaisRestants--;
+            }
+        } else if (key == KEY_ENTER) {
+            char lettreEntree = input_lettre[0];
+            input_lettre[0] = '\0';
+            return lettreEntree;
         }
     }
+
+    return '\0';
 }
+
 
 const char* TheWord(const char* theme) {
     const char** word_array = NULL;
