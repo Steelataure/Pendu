@@ -24,6 +24,7 @@ Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
 Texture2D difficultyBackgroundTexture; //  texture pour l'image de fond des boutons de difficulté
 Texture2D themesBackgroundTexture; 
+Texture2D penduImages[7];
 GameState gameState = MAIN_MENU;
 bool rulesWindow = false;
 
@@ -49,7 +50,7 @@ int main(void) {
     // Initialisation de la fenêtre
     InitWindow(800, 600, "Pendu");
     // Chargement de l'image de fond de la page MENU
-    Image background = LoadImage("assets/pendu.png");
+    Image background = LoadImage("assets/menu.png");
     backgroundTexture = LoadTextureFromImage(background);
     UnloadImage(background);
 
@@ -73,6 +74,16 @@ int main(void) {
     Image difficultyBackground = LoadImage("assets/niveaux.png");
     difficultyBackgroundTexture = LoadTextureFromImage(difficultyBackground);
     UnloadImage(difficultyBackground);
+
+    // Chargez les images "pendu" pour chaque nombre d'essai
+    for (int i = 0; i <= 6; i++) {
+        char imagePath[50];
+        sprintf(imagePath, "assets/pendu%d.png", i + 1); // Assurez-vous d'avoir des fichiers "pendu1.png" à "pendu6.png" dans votre dossier assets
+        Image penduImage = LoadImage(imagePath);
+        penduImages[i] = LoadTextureFromImage(penduImage);
+        UnloadImage(penduImage);
+    }
+
 
     // Chargement de la musique
     InitAudioDevice();
@@ -166,6 +177,7 @@ char lettresCorrectes[26]; // Tableau pour stocker les lettres correctes (26 let
 char lettresIncorrectes[26]; // Tableau pour stocker les lettres incorrectes
 int essaisRestants = 6; // Vous pouvez ajuster cela selon le nombre d'essais que vous voulez accorder
 
+
 void DrawJeu(void) {
     BeginDrawing();
     Color customColor = (Color){253, 231, 190, 255};
@@ -180,9 +192,12 @@ void DrawJeu(void) {
         // Indiquez que le mot secret a été choisi
         motSecretChoisi = true;
     }
-
     // Utilisez la variable motSecret ici
     if (motSecret != NULL) {
+        // Dessinez l'image correspondante au nombre d'essais restants
+        int indexImage = (essaisRestants > 0) ? essaisRestants - 1 : 0;
+        DrawTexture(penduImages[indexImage], 0, 0, RAYWHITE);
+
         // Dessinez le mot caché
         DrawText("Mot caché :", 100, 50, 20, BLACK);
         for (int i = 0; i < strlen(motSecret); i++) {
@@ -198,61 +213,61 @@ void DrawJeu(void) {
                 DrawText("_", 100 + i * 30, 120, 20, BLACK);
             }
         }
-
-        // Dessinez les lettres déjà devinées
-        DrawText("Lettres devinées :", 100, 180, 20, BLACK);
-        DrawText(lettresCorrectes, 100, 210, 20, BLACK);
-        DrawText(lettresIncorrectes, 100, 240, 20, BLACK);
-
         // Dessinez le nombre d'essais restants
-        DrawText(TextFormat("Essais restants : %d", essaisRestants), 100, 270, 20, BLACK);
-        if (essaisRestants == 0){
+        DrawText(TextFormat("Essais restants : %d", (essaisRestants > 0) ? essaisRestants : 0), 100, 270, 20, BLACK);
+
+        if (essaisRestants == 0) {
             DrawText("PERDU", 500, 240, 20, BLACK);
         }
     }
-
     HandleTextInput();
     EndDrawing();
 }
+
+
 
 char input_lettre[2] = ""; // Modifiez la taille du tableau à 2 pour un seul caractère
 bool inputName = false;
 
 char HandleTextInput(void) {
-    DrawText("Entrez une lettre et appuyez sur Entrée : ", 100, 300, 20, BLACK);
-    DrawRectangleLines(100, 330, 40, 40, BLACK);
-    DrawText(input_lettre, 110, 340, 20, BLACK);
+    // Vérifiez si le nombre d'essais restants est supérieur à zéro
+    if (essaisRestants > 0) {
+        DrawText("Entrez une lettre et appuyez sur Entrée : ", 100, 300, 20, BLACK);
+        DrawRectangleLines(100, 330, 40, 40, BLACK);
+        DrawText(input_lettre, 110, 340, 20, BLACK);
 
-    int key = GetKeyPressed();
-    if (key != 0) {
-        if (key == KEY_BACKSPACE && input_lettre[0] != '\0') {
-            input_lettre[0] = '\0';
-        } else if ((key >= KEY_A && key <= KEY_Z) || (key >= KEY_ZERO && key <= KEY_NINE)) {
-            // Convertir la lettre en minuscule avant de l'ajouter
-            input_lettre[0] = (char)tolower(key);
-            input_lettre[1] = '\0';
+        int key = GetKeyPressed();
+        if (key != 0) {
+            if (key == KEY_BACKSPACE && input_lettre[0] != '\0') {
+                input_lettre[0] = '\0';
+            } else if ((key >= KEY_A && key <= KEY_Z) || (key >= KEY_ZERO && key <= KEY_NINE)) {
+                // Convertir la lettre en minuscule avant de l'ajouter
+                input_lettre[0] = (char)tolower(key);
+                input_lettre[1] = '\0';
 
-            // Convertir le mot secret en minuscules
-            char motSecretLower[strlen(motSecret) + 1];
-            strcpy(motSecretLower, motSecret);
-            strlwr(motSecretLower);
+                // Convertir le mot secret en minuscules
+                char motSecretLower[strlen(motSecret) + 1];
+                strcpy(motSecretLower, motSecret);
+                strlwr(motSecretLower);
 
-            // Vérifier si la lettre est dans le mot secret
-            if (strchr(motSecretLower, input_lettre[0]) != NULL) {
-                strncat(lettresCorrectes, input_lettre, 1);
-            } else {
-                strncat(lettresIncorrectes, input_lettre, 1);
-                essaisRestants--;
+                // Vérifier si la lettre est dans le mot secret
+                if (strchr(motSecretLower, input_lettre[0]) != NULL) {
+                    strncat(lettresCorrectes, input_lettre, 1);
+                } else {
+                    strncat(lettresIncorrectes, input_lettre, 1);
+                    essaisRestants--;
+                }
+            } else if (key == KEY_ENTER) {
+                char lettreEntree = input_lettre[0];
+                input_lettre[0] = '\0';
+                return lettreEntree;
             }
-        } else if (key == KEY_ENTER) {
-            char lettreEntree = input_lettre[0];
-            input_lettre[0] = '\0';
-            return lettreEntree;
         }
     }
 
     return '\0';
 }
+
 
 
 const char* TheWord(const char* theme) {
