@@ -41,7 +41,7 @@ void DrawCredits(void);
 void DrawRules(void);
 void DrawJeu(void);
 const char* DrawThemes();
-
+void HandleTextInput(void);
 int main(void) {
     // Initialisation de la fenêtre
     InitWindow(800, 600, "Pendu");
@@ -57,7 +57,7 @@ int main(void) {
 
     // Chargement de l'image de fond des thèmes
     Image themesBackground = LoadImage("assets/niveaux.png");
-    themesBackgroundTexture = difficultyBackgroundTexture;
+    themesBackgroundTexture = LoadTextureFromImage(themesBackground);
     UnloadImage(themesBackground);
 
     // Chargement de l'image de fond de la page REGLES
@@ -96,7 +96,7 @@ int main(void) {
 
     // Placement des boutons page THEMES
     int buttonWidthbis = 100;
-    int buttonSpacingbis = 20;
+    int buttonSpacingbis = 10;
 
 
 // Centre les boutons de la page "Themes"
@@ -117,6 +117,8 @@ int main(void) {
                 break;
             case LEVELS:
                 DrawNewGame();
+                PlayMusicStream(musique);
+                UpdateMusicStream(musique);
                 break;
             case THEMES:
                 DrawThemes();
@@ -176,42 +178,43 @@ void DrawJeu(void) {
     // Utilisez la variable motSecret ici
     if (motSecret != NULL) {
         // Dessinez le mot caché
-        DrawText("Mot caché:", 100, 50, 20, BLACK);
+        DrawText("Mot caché :", 100, 50, 20, BLACK);
         for (int i = 0; i < strlen(motSecret); i++) {
             if (motSecret[i] == ' ') {
-                DrawText(" ", 100 + i * 30, 80, 20, BLACK);
+                DrawText(" ", 100 + i * 30, 120, 20, BLACK);
             } else {
-                DrawText("_", 100 + i * 30, 80, 20, BLACK);
+                DrawText("_", 100 + i * 30, 120, 20, BLACK);
             }
         }
         // Dessinez les lettres déjà devinées
-        DrawText("Lettres devinées :", 100, 150, 20, BLACK);
+        DrawText("Lettres devinées :", 100, 180, 20, BLACK);
         //DrawText(motSecret, 100, 100, 30, BLACK);
         //DrawText(motSecret, 30, 80, 20, BLACK);
     }
+    HandleTextInput();
 
     EndDrawing();
 }
 
 // Déclarations de variables globales
-char playerName[64] = "";
+char input_lettre[64] = "";
 bool inputName = false;
 
 // Fonction pour gérer la saisie de texte
 void HandleTextInput(void) {
-    DrawText("Entrez votre nom:", 250, 250, 20, BLACK);
-    DrawRectangleLines(250, 280, 300, 40, BLACK);
-    DrawText(playerName, 260, 290, 20, BLACK);
+    DrawText("Entrez une lettre : ", 100, 300, 20, BLACK);
+    DrawRectangleLines(100, 330, 200, 40, BLACK);
+    DrawText(input_lettre, 110, 340, 20, BLACK);
 
     // Obtenez la saisie du clavier
     int key = GetKeyPressed();
     if (key != 0) {
-        int length = strlen(playerName);
+        int length = strlen(input_lettre);
         if (key == KEY_BACKSPACE && length > 0) {
-            playerName[length - 1] = '\0'; // Supprimez le dernier caractère
-        } else if (length < sizeof(playerName) - 1) {
-            playerName[length] = (char)key; // Ajoutez le caractère
-            playerName[length + 1] = '\0';   // Assurez-vous de terminer la chaîne
+            input_lettre[length - 1] = '\0'; // Supprimez le dernier caractère
+        } else if (length < sizeof(input_lettre) - 1) {
+            input_lettre[length] = (char)key; // Ajoutez le caractère
+            input_lettre[length + 1] = '\0';   // Assurez-vous de terminer la chaîne
         }
     }
 }
@@ -250,8 +253,6 @@ const char* TheWord(const char* theme) {
 
     return word_array[random_index];
 }
-
-
 
 // Fonction de la page du MENU
 void DrawMainMenu(void) {
@@ -350,11 +351,6 @@ void DrawNewGame(void) {
             // Mettre ici la logique pour le niveau Difficile
         }
     }    
-    
-    if (inputName) {
-        HandleTextInput();
-    }
-
     // Affichage du bouton "Retour"
     DrawRectangleRec(backButtonBounds, BROWN);
     DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
@@ -440,7 +436,6 @@ const char* DrawThemes() {
             gameState = GAME;
             theme = "animaux";
             return theme;
-            // Mettre ici l'affichage du pendu selon Animaux
         }
     }
 
@@ -454,7 +449,7 @@ const char* DrawThemes() {
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             gameState = GAME;
             theme = "fruits";
-            return theme;            // Mettre ici l'affichage du pendu selon Fruits
+            return theme;
         }
     }
 
@@ -469,7 +464,6 @@ const char* DrawThemes() {
             gameState = GAME;
             theme = "pays";
             return theme;
-            // Mettre ici l'affichage du pendu selon Pays
         }
     }
 
@@ -483,7 +477,7 @@ const char* DrawThemes() {
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             gameState = GAME;
             theme = "metiers";
-            return theme;            // Mettre ici l'affichage du pendu selon métiers
+            return theme;
         }
     }
 
@@ -497,7 +491,7 @@ const char* DrawThemes() {
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             gameState = GAME;
             theme = "sports";
-            return theme;            // Mettre ici l'affichage du pendu selon sports
+            return theme;
         }
     }
 
@@ -511,7 +505,7 @@ const char* DrawThemes() {
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
             gameState = GAME;
             theme = "couleurs";
-            return theme;            // Mettre ici l'affichage du pendu selon Couleurs
+            return theme;
         }
     }
 
