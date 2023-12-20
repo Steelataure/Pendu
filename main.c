@@ -8,14 +8,6 @@
 
 typedef enum { MAIN_MENU, NEW_GAME, CREDITS, RULES, THEMES, RANK } GameState;
 
-typedef struct {
-
-    char chaine[5][LONGUEUR_MAX];
-
-    int nombre_de_lignes;
-
-} Resultat;
-
 Rectangle newGameButtonBounds;
 Rectangle rulesButtonBounds;
 Rectangle creditsButtonBounds;
@@ -484,55 +476,10 @@ const char* DrawThemes() {
     EndDrawing();
 }
 
-// const char* LectureFichier() {
-
-//     FILE* rank = NULL; // Pointeur vers le flux
-//     char chaine[LONGUEUR_MAX] = "";
-
-//     rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
-
-//     if (rank != NULL) {
-//         while(fgets(chaine, LONGUEUR_MAX, rank) != NULL)
-//             if (chaine[0] <= '5') {
-//                 return chaine;
-//             }
-//             else {
-//                 fprintf(stderr, "Fichier non trouve\n");
-//                 exit(EXIT_FAILURE);
-//             }
-//     }
-// } 
-
-// const char* LectureFichier() {
-//     FILE* rank = NULL; 
-//     static char concatenatedLines[MAX_LINES] = ""; 
-//     char chaine[LONGUEUR_MAX] = "";
-
-//     rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
-
-//     int nombre_de_lignes = 0;
-
-//     if (rank != NULL) {
-//         while (fgets(chaine, sizeof(chaine), rank) != NULL && nombre_de_lignes <= 5) {
-//             if (chaine[0] <= '5') {
-//                 strcat(concatenatedLines, chaine); // Concatenate lines that meet the condition
-//             }
-//             // Add a condition to break the loop if the concatenatedLines buffer is full
-//             if (strlen(concatenatedLines) >= MAX_LINES) {
-//                 break;
-//             }
-//         }
-//         fclose(rank); 
-//         return concatenatedLines;
-//     } else {
-//         fprintf(stderr, "Fichier non trouve\n");
-//         exit(EXIT_FAILURE);
-//     }
-// }
-
 const char* LectureFichier() {
-    FILE* rank = fopen("assets/rank.txt", "r"); // Open the file in read mode
-    static char chaine[LONGUEUR_MAX]; // Static array to hold the string
+
+    FILE* rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
+    static char chaine[LONGUEUR_MAX]; 
     static char concatenatedLines[MAX_LINES];
     concatenatedLines[0] = '\0';
 
@@ -551,7 +498,7 @@ const char* LectureFichier() {
         }
     }      
 
-fclose(rank);
-return concatenatedLines;
+    fclose(rank);
+    return concatenatedLines;
 
 }
