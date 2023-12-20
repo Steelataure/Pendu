@@ -13,7 +13,6 @@ Rectangle newGameButtonBounds;
 Rectangle rankButtonBounds;
 Rectangle rulesButtonBounds;
 Rectangle creditsButtonBounds;
-Rectangle rankButtonBounds;
 Rectangle backButtonBounds;
 Rectangle easyButtonBounds;
 Rectangle intermediateButtonBounds;
@@ -62,7 +61,6 @@ bool partieTerminee = false;
 int main(void) {
     // Initialisation de la fenêtre
     InitWindow(800, 600, "Pendu");
-
     // Chargement de l'image de fond de la page MENU
     Image background = LoadImage("assets/menu.png");
     backgroundTexture = LoadTextureFromImage(background);
@@ -116,7 +114,6 @@ int main(void) {
     newGameButtonBounds = (Rectangle){(screenWidth - 4 * buttonWidth - 2 * buttonSpacing) / 2, screenHeight / 2 - 50, buttonWidth, 50};
     rulesButtonBounds = (Rectangle){newGameButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
     creditsButtonBounds = (Rectangle){rulesButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
-    rankButtonBounds = (Rectangle){creditsButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
     backButtonBounds = (Rectangle){GetScreenWidth() - 70, 10, 60, 30};
     rankButtonBounds = (Rectangle){creditsButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
 
@@ -126,19 +123,6 @@ int main(void) {
     intermediateButtonBounds = (Rectangle){easyButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 30, buttonWidth, 50};
     difficultButtonBounds = (Rectangle){intermediateButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 30, buttonWidth, 50};
 
-    // Placement des boutons page THEMES
-    int buttonWidthbis = 100;
-    int buttonSpacingbis = 20;
-
-
-// Centre les boutons de la page "Themes"
-    int totalbisButtonsWidth = 7 * buttonWidthbis + 1 * buttonSpacingbis; // Largeur totale des six boutons et deux espaces entre eux
-    animalsButtonBounds = (Rectangle){(screenWidth - totalbisButtonsWidth) / 2, screenHeight / 2 - 30, buttonWidthbis, 50};
-    fruitsButtonBounds = (Rectangle){animalsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    countryButtonBounds = (Rectangle){fruitsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    workButtonBounds = (Rectangle){countryButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    sportsButtonBounds = (Rectangle){workButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
-    colorsButtonsBounds = (Rectangle){sportsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50}; 
 
     // Placement des boutons page THEMES
     int buttonWidthbis = 100;
@@ -162,7 +146,7 @@ int main(void) {
                 PlayMusicStream(musique);
                 UpdateMusicStream(musique);
                 break;
-            case NEW_GAME:
+            case LEVELS:
                 DrawNewGame();
                 PlayMusicStream(musique);
                 UpdateMusicStream(musique);
@@ -204,7 +188,6 @@ int main(void) {
     UnloadTexture(themesBackgroundTexture);
     UnloadTexture(difficultyBackgroundTexture);
     UnloadMusicStream(musique);
-
     CloseAudioDevice();
     CloseWindow();
 
@@ -217,6 +200,8 @@ char lettresCorrectes[26]; // Tableau pour stocker les lettres correctes (26 let
 char lettresIncorrectes[26]; // Tableau pour stocker les lettres incorrectes
 int essaisRestants = 6; // Vous pouvez ajuster cela selon le nombre d'essais que vous voulez accorder
 
+void DrawJeu(void) {
+    BeginDrawing();
     Color customColor = (Color){253, 231, 190, 255};
     ClearBackground(customColor);
 
@@ -382,8 +367,10 @@ const char* TheWord(const char* theme) {
 void DrawMainMenu(void) {
     BeginDrawing();
 
+
     // Affichage de l'image de fond
     DrawTexture(backgroundTexture, 0, 0, RAYWHITE);
+
     // Espace entre les boutons
     //int buttonSpacing = 20;
 
@@ -395,7 +382,7 @@ void DrawMainMenu(void) {
     if (CheckCollisionPointRec(GetMousePosition(), newGameButtonBounds)) {
         DrawRectangleLinesEx(newGameButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = NEW_GAME;
+            gameState = LEVELS;
         }
     }
 
@@ -435,30 +422,14 @@ void DrawMainMenu(void) {
         }
     }
 
-    // Affichage du bouton "Classement"
-    DrawRectangleRec(rankButtonBounds, BROWN);
-    DrawText("Classement", (int)(rankButtonBounds.x + rankButtonBounds.width / 2 - MeasureText("Classement", 20) / 2), (int)(rankButtonBounds.y + 15), 20, BLACK);
-
-    // Pointeur du bouton "Crédits"
-    if (CheckCollisionPointRec(GetMousePosition(), rankButtonBounds)) {
-        DrawRectangleLinesEx(rankButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = RANK;
-        }
-    }
-
-    
-
     EndDrawing();
 }
-
-
-
 
 
 // Fonction de la page "Nouvelle Partie"
 void DrawNewGame(void) {
     BeginDrawing();
+
 
     ClearBackground(RAYWHITE);
 
@@ -485,7 +456,7 @@ void DrawNewGame(void) {
     if (CheckCollisionPointRec(GetMousePosition(), intermediateButtonBounds)) {
         DrawRectangleLinesEx(intermediateButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
+            // Mettre ici la logique pour le niveau Intermédiaire
         }
     }
 
@@ -497,7 +468,7 @@ void DrawNewGame(void) {
     if (CheckCollisionPointRec(GetMousePosition(), difficultButtonBounds)) {
         DrawRectangleLinesEx(difficultButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
+            // Mettre ici la logique pour le niveau Difficile
         }
     }    
     // Affichage du bouton "Retour"
@@ -514,10 +485,6 @@ void DrawNewGame(void) {
 
     EndDrawing();
 }
-
-
-
-
 
 
 // Fonction de la page "Crédits"
@@ -541,11 +508,6 @@ void DrawCredits(void) {
 
     EndDrawing();
 }
-
-
-
-
-
 
 // Fonction de la page "Règles du jeu"
 void DrawRules(void) {
