@@ -22,9 +22,12 @@ Rectangle colorsButtonsBounds;
 Texture2D backgroundTexture;
 Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
-Texture2D difficultyBackgroundTexture; //  texture pour l'image de fond des boutons de difficulté
+Texture2D difficultyBackgroundTexture;
 Texture2D themesBackgroundTexture; 
+Texture2D test; 
+
 Texture2D penduImages[7];
+
 GameState gameState = MAIN_MENU;
 bool rulesWindow = false;
 
@@ -60,7 +63,7 @@ int main(void) {
     UnloadImage(creditsBackground);
 
     // Chargement de l'image de fond des thèmes
-    Image themesBackground = LoadImage("assets/niveaux.png");
+    Image themesBackground = LoadImage("assets/pendu7.png");
     themesBackgroundTexture = LoadTextureFromImage(themesBackground);
     UnloadImage(themesBackground);
 
@@ -69,16 +72,15 @@ int main(void) {
     rulesBackgroundTexture = LoadTextureFromImage(rulesBackground);
     UnloadImage(rulesBackground);
 
-
     // Chargement de l'image de fond pour le MENU de DIFFICULTES
     Image difficultyBackground = LoadImage("assets/niveaux.png");
     difficultyBackgroundTexture = LoadTextureFromImage(difficultyBackground);
     UnloadImage(difficultyBackground);
 
     // Chargez les images "pendu" pour chaque nombre d'essai
-    for (int i = 0; i <= 6; i++) {
+    for (int i = 0; i <= 7; i++) {
         char imagePath[50];
-        sprintf(imagePath, "assets/pendu%d.png", i + 1); // Assurez-vous d'avoir des fichiers "pendu1.png" à "pendu6.png" dans votre dossier assets
+        sprintf(imagePath, "assets/pendu%d.png", i + 1);
         Image penduImage = LoadImage(imagePath);
         penduImages[i] = LoadTextureFromImage(penduImage);
         UnloadImage(penduImage);
@@ -163,6 +165,7 @@ int main(void) {
     UnloadTexture(backgroundTexture);
     UnloadTexture(creditsBackgroundTexture);
     UnloadTexture(rulesBackgroundTexture);
+    UnloadTexture(themesBackgroundTexture);
     UnloadTexture(difficultyBackgroundTexture);
     UnloadMusicStream(musique);
     CloseAudioDevice();
@@ -195,8 +198,13 @@ void DrawJeu(void) {
     // Utilisez la variable motSecret ici
     if (motSecret != NULL) {
         // Dessinez l'image correspondante au nombre d'essais restants
+
         int indexImage = (essaisRestants > 0) ? essaisRestants - 1 : 0;
-        DrawTexture(penduImages[indexImage], 0, 0, RAYWHITE);
+        DrawTexture(penduImages[indexImage + 1], 0, 0, RAYWHITE);
+        
+        if (essaisRestants == 0){
+            DrawTexture(penduImages[0], 0, 0, RAYWHITE);
+        }
 
         // Dessinez le mot caché
         DrawText("Mot caché :", 100, 50, 20, BLACK);
@@ -251,7 +259,6 @@ bool CheckVictoire(void) {
         char lettre = motSecret[i];
 
         if (lettre != ' ' && strchr(lettresCorrectes, lettre) == NULL) {
-            // Si une lettre du mot secret n'est pas dans les lettres correctes, la victoire n'est pas encore atteinte
             return false;
         }
     }
@@ -491,7 +498,6 @@ void DrawRules(void) {
                 rulesWindow = false; // Désactiver la fenêtre des règles
             }
         }
-
         EndDrawing();
     }
 }
