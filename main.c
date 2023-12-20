@@ -1,7 +1,7 @@
 #include "raylib.h"
 #include <stdio.h>
 
-#define LONGUEUR_MAX = 1024;
+#define LONGUEUR_MAX 1024
 
 typedef enum { MAIN_MENU, NEW_GAME, CREDITS, RULES, THEMES, RANK } GameState;
 
@@ -34,6 +34,7 @@ void DrawCredits(void);
 void DrawRules(void);
 void DrawRank(void);
 const char* DrawThemes();
+const char* LectureFichier();
 
 int main(void) {
     // Initialisation de la fenêtre
@@ -350,7 +351,7 @@ void DrawRank(void) {
     // Afficher l'image de fond pour la page "Crédits"
     DrawTexture(rankBackgroundTexture, 0, 0, RAYWHITE);
 
-    /* METTRE ICI LE CODE POUR L'AFFICHAGE DU RANK */
+    LectureFichier();
 
     // Affichage du bouton "Retour"
     DrawRectangleRec(backButtonBounds, BROWN);
@@ -470,20 +471,21 @@ const char* DrawThemes() {
     EndDrawing();
 }
 
-// const char* LectureFichier() {
+const char* LectureFichier() {
 
-//     FILE* rank = NULL; // Pointeur vers le flux
-//     char chaine[LONGUEUR_MAX] = "";
+    FILE* rank = NULL; // Pointeur vers le flux
+    char chaine[LONGUEUR_MAX] = "";
 
-//     rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
+    rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
 
-//     if (rank != NULL) {
-//         while(fgets(chaine, LONGUEUR_MAX, rank) != NULL)
-//             if (chaine[0] <= 5) {
-//                 DrawText("%s\n", 100, 150, 20);
-//             }
-//             else {
-//                 DrawText("Malheuresement, il nous est impossible de joindre le fichier", 400, 300, 20);
-//             }
-//     }
-// } 
+    if (rank != NULL) {
+        while(fgets(chaine, LONGUEUR_MAX, rank) != NULL)
+            if (chaine[0] <= 5) {
+                return "%s";
+            }
+            else {
+                LOG_ERROR == "Impossible de charger le fichier";
+                gameState = MAIN_MENU;
+            }
+    }
+} 
