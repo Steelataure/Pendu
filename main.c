@@ -4,9 +4,13 @@
 #include <string.h>
 #include <ctype.h>
 
-typedef enum { MAIN_MENU, LEVELS, GAME, CREDITS, RULES, THEMES} GameState;
+#define LONGUEUR_MAX 1024
+#define MAX_LINES 5
+
+typedef enum { MAIN_MENU, LEVELS, GAME, CREDITS, RULES, THEMES, RANK} GameState;
 
 Rectangle newGameButtonBounds;
+Rectangle rankButtonBounds;
 Rectangle rulesButtonBounds;
 Rectangle creditsButtonBounds;
 Rectangle backButtonBounds;
@@ -24,6 +28,7 @@ Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
 Texture2D difficultyBackgroundTexture;
 Texture2D themesBackgroundTexture; 
+Texture2D rankBackgroundTexture;
 Texture2D test; 
 
 Texture2D penduImages[7];
@@ -48,6 +53,9 @@ void DrawRules(void);
 void DrawJeu(void);
 const char* DrawThemes();
 char HandleTextInput(void);
+void DrawRank(void);
+const char* LectureFichier();
+
 bool partieTerminee = false;
 
 int main(void) {
@@ -78,6 +86,10 @@ int main(void) {
     difficultyBackgroundTexture = LoadTextureFromImage(difficultyBackground);
     UnloadImage(difficultyBackground);
 
+    Image rankBackground = LoadImage("assets/score.png");
+    rankBackgroundTexture = LoadTextureFromImage(rankBackground);
+    UnloadImage(rankBackground);
+
     // Chargez les images "pendu" pour chaque nombre d'essai
     for (int i = 0; i <= 7; i++) {
         char imagePath[50];
@@ -94,15 +106,16 @@ int main(void) {
     Music musique = LoadMusicStream("assets/Sandstorm-_8-Bit-NES-Remix_.mp3");
 
     // Placement des boutons page MENU
-    int buttonWidth = 200;
+    int buttonWidth = 175;
     int buttonSpacing = 20; // Espace entre les boutons
     int screenWidth = GetScreenWidth();
     int screenHeight = GetScreenHeight();
 
-    newGameButtonBounds = (Rectangle){(screenWidth - 3 * buttonWidth - 2 * buttonSpacing) / 2, screenHeight / 2 - 50, buttonWidth, 50};
+    newGameButtonBounds = (Rectangle){(screenWidth - 4 * buttonWidth - 2 * buttonSpacing) / 2, screenHeight / 2 - 50, buttonWidth, 50};
     rulesButtonBounds = (Rectangle){newGameButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
     creditsButtonBounds = (Rectangle){rulesButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
     backButtonBounds = (Rectangle){GetScreenWidth() - 70, 10, 60, 30};
+    rankButtonBounds = (Rectangle){creditsButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 50, buttonWidth, 50};
 
 // Centre les boutons de la page "Nouvelle Partie"
     int totalButtonsWidth = 3 * buttonWidth + 2 * buttonSpacing; // Largeur totale des trois boutons et deux espaces entre eux
@@ -117,6 +130,7 @@ int main(void) {
 
 
 // Centre les boutons de la page "Themes"
+
     int totalbisButtonsWidth = 6 * buttonWidthbis + 1 * buttonSpacingbis; // Largeur totale des six boutons et deux espaces entre eux
     animalsButtonBounds = (Rectangle){(screenWidth - totalbisButtonsWidth) / 2, screenHeight / 2 - 30, buttonWidthbis, 50};
     fruitsButtonBounds = (Rectangle){animalsButtonBounds.x + buttonWidthbis + buttonSpacingbis, screenHeight / 2 - 30, buttonWidthbis, 50};
@@ -149,6 +163,11 @@ int main(void) {
                 break;
             case CREDITS:
                 DrawCredits();
+                PlayMusicStream(musique);
+                UpdateMusicStream(musique);
+                break;
+            case RANK:
+                DrawRank();
                 PlayMusicStream(musique);
                 UpdateMusicStream(musique);
                 break;
@@ -391,6 +410,17 @@ void DrawMainMenu(void) {
             gameState = CREDITS;
         }
     }
+    // Affichage du bouton "Classement"
+    DrawRectangleRec(rankButtonBounds, BROWN);
+    DrawText("Classement", (int)(rankButtonBounds.x + rankButtonBounds.width / 2 - MeasureText("Classement", 20) / 2), (int)(rankButtonBounds.y + 15), 20, BLACK);
+
+    // Pointeur du bouton "Crédits"
+    if (CheckCollisionPointRec(GetMousePosition(), rankButtonBounds)) {
+        DrawRectangleLinesEx(rankButtonBounds, 2, WHITE);
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            gameState = RANK;
+        }
+    }
 
     EndDrawing();
 }
@@ -611,4 +641,56 @@ const char* DrawThemes() {
     }
 
     EndDrawing();
+}
+
+void DrawRank(void) {
+    BeginDrawing();
+
+    // Afficher l'image de fond pour la page "Crédits"
+    DrawTexture(rankBackgroundTexture, 0, 0, RAYWHITE);
+
+    // Affichage du classement
+
+    DrawText(LectureFichier(), 200, 120, 30, BLACK);
+
+    // Affichage du bouton "Retour"
+    DrawRectangleRec(backButtonBounds, BROWN);
+    DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
+
+    // Pointeur du bouton "Retour"
+    if (CheckCollisionPointRec(GetMousePosition(), backButtonBounds)) {
+        DrawRectangleLinesEx(backButtonBounds, 2, WHITE);
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            gameState = MAIN_MENU;
+        }
+    }
+
+    EndDrawing();
+}
+
+const char* LectureFichier() {
+
+    FILE* rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
+    static char chaine[LONGUEUR_MAX]; 
+    static char concatenatedLines[MAX_LINES];
+    concatenatedLines[0] = '\0';
+
+    for (int i = 0; i < 5; i++)
+    {
+        if(fgets(chaine, LONGUEUR_MAX, rank) != NULL) {
+            if (chaine[0] <= '5') {
+            strcat(concatenatedLines, chaine);
+            }
+            if (strlen(concatenatedLines) == MAX_LINES) {
+                break;
+            }
+        }
+        else {
+            exit(EXIT_FAILURE);
+        }
+    }      
+
+    fclose(rank);
+    return concatenatedLines;
+
 }
