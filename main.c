@@ -329,11 +329,7 @@ char HandleTextInput(void) {
                 strncat(lettresIncorrectes, input_lettre, 1);
                 essaisRestants--;
             }
-        } else if (key == KEY_ENTER) {
-            char lettreEntree = input_lettre[0];
-            input_lettre[0] = '\0';
-            return lettreEntree;
-        }
+        } 
     }
 
     return '\0';
