@@ -31,12 +31,13 @@ Texture2D penduImages[7];
 GameState gameState = MAIN_MENU;
 bool rulesWindow = false;
 
-const char* animaux[] = {"lion", "elephant", "girafe", "tigre", "singe", "chien"};
-const char* fruits[] = {"pomme", "banane", "fraise", "kiwi", "orange"};
-const char* pays[] = {"France", "Etats-Unis", "Japon", "Bresil", "Australie"};
-const char* metiers[] = {"medecin", "infirmier", "professeur", "architecte", "informaticien"};
-const char* sports[] = {"football", "basketball", "tennis", "natation", "golf"};
-const char* couleurs[] = {"rouge", "vert", "bleu", "jaune", "noir", "rose", "marron"};
+const char* animaux[] = {"lion", "tigre", "singe", "chien", "aigle", "elephant", "girafe", "chouette", "suricate", "antilope", "hirondelle", "rhinoceros", "raphicere", "rossignol", "cephalophe"};
+const char* fruits[] = {"pomme", "kiwi", "goji", "melon", "mikan","orange", "banane", "fraise", "mangue", "cerise", "groseille", "calamondin", "framboise", "nectarine", "mandarine"};
+const char* pays[] = {"qatar", "perou", "japon", "niger", "liban", "vietnam", "zimbabwe", "bresil", "france", "nigeria", "papouasie", "tadjikistan", "allemagne", "australie", "venezuela"};
+const char* metiers[] = {"agent", "juge", "guide", "garde", "clown", "medecin", "eboueur", "barista", "pilote", "dentiste", "consultant", "infirmier", "professeur", "architecte", "informaticien"};
+const char* sports[] = {"apnee", "boxe", "lutte", "ski", "golf", "aquagym", "baseball", "natation", "tennis", "football","taekwondo", "wakeboard", "equitation", "canyoning", "athletisme"};
+const char* couleurs[] = {"rouge", "vert", "bleu", "blanc", "noir", "marron", "orange", "magenta", "ecarlate", "orpiment","aubergine", "vermillon", "citrouille", "amethyste", "polychrome"};
+
 
 bool CheckVictoire(void);
 const char* TheWord(const char* theme);
