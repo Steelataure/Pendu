@@ -484,8 +484,8 @@ const char* LectureFichier() {
                 return "%s";
             }
             else {
-                LOG_ERROR == "Impossible de charger le fichier";
-                gameState = MAIN_MENU;
+                fprintf(stderr, "Fichier non trouve\n");
+                exit(EXIT_FAILURE);
             }
     }
 } 
