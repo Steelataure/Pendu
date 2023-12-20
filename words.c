@@ -13,6 +13,7 @@ const char* random_word(const char* theme) {
     const char** word_array = NULL;
     int array_size = 0;
 
+    
     if (strcmp(theme, "animaux") == 0) {
         word_array = animaux;
         array_size = sizeof(animaux) / sizeof(animaux[0]);
