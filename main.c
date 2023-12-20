@@ -1,9 +1,20 @@
 #include "raylib.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define LONGUEUR_MAX 1024
+#define MAX_LINES 5
 
 typedef enum { MAIN_MENU, NEW_GAME, CREDITS, RULES, THEMES, RANK } GameState;
+
+typedef struct {
+
+    char chaine[5][LONGUEUR_MAX];
+
+    int nombre_de_lignes;
+
+} Resultat;
 
 Rectangle newGameButtonBounds;
 Rectangle rulesButtonBounds;
@@ -351,7 +362,9 @@ void DrawRank(void) {
     // Afficher l'image de fond pour la page "Crédits"
     DrawTexture(rankBackgroundTexture, 0, 0, RAYWHITE);
 
-    LectureFichier();
+    // Affichage du classement
+
+    DrawText(LectureFichier(), 200, 120, 30, BLACK);
 
     // Affichage du bouton "Retour"
     DrawRectangleRec(backButtonBounds, BROWN);
@@ -471,21 +484,74 @@ const char* DrawThemes() {
     EndDrawing();
 }
 
+// const char* LectureFichier() {
+
+//     FILE* rank = NULL; // Pointeur vers le flux
+//     char chaine[LONGUEUR_MAX] = "";
+
+//     rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
+
+//     if (rank != NULL) {
+//         while(fgets(chaine, LONGUEUR_MAX, rank) != NULL)
+//             if (chaine[0] <= '5') {
+//                 return chaine;
+//             }
+//             else {
+//                 fprintf(stderr, "Fichier non trouve\n");
+//                 exit(EXIT_FAILURE);
+//             }
+//     }
+// } 
+
+// const char* LectureFichier() {
+//     FILE* rank = NULL; 
+//     static char concatenatedLines[MAX_LINES] = ""; 
+//     char chaine[LONGUEUR_MAX] = "";
+
+//     rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
+
+//     int nombre_de_lignes = 0;
+
+//     if (rank != NULL) {
+//         while (fgets(chaine, sizeof(chaine), rank) != NULL && nombre_de_lignes <= 5) {
+//             if (chaine[0] <= '5') {
+//                 strcat(concatenatedLines, chaine); // Concatenate lines that meet the condition
+//             }
+//             // Add a condition to break the loop if the concatenatedLines buffer is full
+//             if (strlen(concatenatedLines) >= MAX_LINES) {
+//                 break;
+//             }
+//         }
+//         fclose(rank); 
+//         return concatenatedLines;
+//     } else {
+//         fprintf(stderr, "Fichier non trouve\n");
+//         exit(EXIT_FAILURE);
+//     }
+// }
+
 const char* LectureFichier() {
+    FILE* rank = fopen("assets/rank.txt", "r"); // Open the file in read mode
+    static char chaine[LONGUEUR_MAX]; // Static array to hold the string
+    static char concatenatedLines[MAX_LINES];
+    concatenatedLines[0] = '\0';
 
-    FILE* rank = NULL; // Pointeur vers le flux
-    char chaine[LONGUEUR_MAX] = "";
-
-    rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
-
-    if (rank != NULL) {
-        while(fgets(chaine, LONGUEUR_MAX, rank) != NULL)
-            if (chaine[0] <= 5) {
-                return "%s";
+    for (int i = 0; i < 5; i++)
+    {
+        if(fgets(chaine, LONGUEUR_MAX, rank) != NULL) {
+            if (chaine[0] <= '5') {
+            strcat(concatenatedLines, chaine);
             }
-            else {
-                fprintf(stderr, "Fichier non trouve\n");
-                exit(EXIT_FAILURE);
+            if (strlen(concatenatedLines) == MAX_LINES) {
+                break;
             }
-    }
-} 
+        }
+        else {
+            exit(EXIT_FAILURE);
+        }
+    }      
+
+fclose(rank);
+return concatenatedLines;
+
+}
