@@ -269,6 +269,17 @@ void DrawJeu(void) {
         }
     }
 
+    // Affichage du bouton "Retour"
+    DrawRectangleRec(backButtonBounds, BROWN);
+    DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
+
+    // Pointeur du bouton "Retour"
+    if (CheckCollisionPointRec(GetMousePosition(), backButtonBounds)) {
+        DrawRectangleLinesEx(backButtonBounds, 2, WHITE);
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            gameState = THEMES;
+        }
+    }
     HandleTextInput();
     EndDrawing();
 }
@@ -456,7 +467,7 @@ void DrawNewGame(void) {
     if (CheckCollisionPointRec(GetMousePosition(), intermediateButtonBounds)) {
         DrawRectangleLinesEx(intermediateButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici la logique pour le niveau Intermédiaire
+            gameState = THEMES;
         }
     }
 
@@ -468,7 +479,7 @@ void DrawNewGame(void) {
     if (CheckCollisionPointRec(GetMousePosition(), difficultButtonBounds)) {
         DrawRectangleLinesEx(difficultButtonBounds, 2, WHITE);
         if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            // Mettre ici la logique pour le niveau Difficile
+            gameState = THEMES;
         }
     }    
     // Affichage du bouton "Retour"
