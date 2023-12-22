@@ -230,7 +230,7 @@ void DrawJeu(void) {
         }
 
         // Dessinez le mot caché
-        DrawText("Mot caché :", 100, 50, 20, BLACK);
+        //DrawText("Mot caché :", 100, 50, 20, BLACK);
         int x = 100;
 
         for (int i = 0; i < strlen(motSecret); i++) {
@@ -259,12 +259,12 @@ void DrawJeu(void) {
 
         // Dessinez les lettres déjà devinées
         DrawText("Lettres devinées :", 100, 180, 20, BLACK);
-        DrawText(lettresCorrectes, 100, 210, 20, BLACK);
-        DrawText(lettresIncorrectes, 100, 240, 20, BLACK);
+        DrawText(lettresCorrectes, 100, 210, 20, GREEN);
+        DrawText(lettresIncorrectes, 100, 240, 20, RED);
         //DrawText(motSecret, 400, 240, 20, BLACK);
 
         // Dessinez le nombre d'essais restants
-        DrawText(TextFormat("Essais restants : %d", (essaisRestants > 0) ? essaisRestants : 0), 100, 270, 20, BLACK);
+        DrawText(TextFormat("Essais restants : %d", (essaisRestants > 0) ? essaisRestants : 0), 475, 15, 20, BLACK);
 
         // Si toutes les lettres correctes ont été trouvées, le joueur a gagné
         if (CheckVictoire()) {
