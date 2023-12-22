@@ -16,6 +16,7 @@ Rectangle rulesButtonBounds;
 Rectangle creditsButtonBounds;
 Rectangle backButtonBounds;
 Rectangle easyButtonBounds;
+Texture2D rankBackgroundTexture;
 Rectangle intermediateButtonBounds;
 Rectangle difficultButtonBounds;
 Rectangle animalsButtonBounds;
@@ -30,9 +31,6 @@ Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
 Texture2D difficultyBackgroundTexture;
 Texture2D themesBackgroundTexture; 
-Texture2D rankBackgroundTexture;
-Texture2D test; 
-
 Texture2D penduImages[7];
 
 GameState gameState = MAIN_MENU;
@@ -102,7 +100,6 @@ int main(void) {
         UnloadImage(penduImage);
     }
 
-
     // Chargement de la musique
     InitAudioDevice();
     IsAudioDeviceReady();
@@ -126,11 +123,9 @@ int main(void) {
     intermediateButtonBounds = (Rectangle){easyButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 30, buttonWidth, 50};
     difficultButtonBounds = (Rectangle){intermediateButtonBounds.x + buttonWidth + buttonSpacing, screenHeight / 2 - 30, buttonWidth, 50};
 
-
     // Placement des boutons page THEMES
     int buttonWidthbis = 100;
     int buttonSpacingbis = 10;
-
 
 // Centre les boutons de la page "Themes"
 
@@ -421,126 +416,81 @@ const char* TheWord(const char* theme) {
 // Fonction de la page du MENU
 void DrawMainMenu(void) {
     BeginDrawing();
-
-
-    // Affichage de l'image de fond
+    ClearBackground(RAYWHITE);
     DrawTexture(backgroundTexture, 0, 0, RAYWHITE);
 
-    // Espace entre les boutons
-    //int buttonSpacing = 20;
+    // Tableaux pour les boutons et les labels correspondants
+    Rectangle bounds[] = { newGameButtonBounds, rulesButtonBounds, creditsButtonBounds, rankButtonBounds };
+    const char* labels[] = { "Nouvelle Partie", "Règles du jeu", "Crédits", "Classement" };
 
-    // Affichage bouton "Nouvelle Partie"
-    DrawRectangleRec(newGameButtonBounds, BROWN);
-    DrawText("Nouvelle Partie", (int)(newGameButtonBounds.x + newGameButtonBounds.width / 2 - MeasureText("Nouvelle Partie", 20) / 2), (int)(newGameButtonBounds.y + 15), 20, BLACK);
+    for (int i = 0; i < sizeof(bounds) / sizeof(bounds[0]); i++) {
+        DrawRectangleRec(bounds[i], BROWN);
+        
+        // Taille de la police
+        int fontSize = 20;
 
-    // Pointeur du bouton "Nouvelle Partie"
-    if (CheckCollisionPointRec(GetMousePosition(), newGameButtonBounds)) {
-        DrawRectangleLinesEx(newGameButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = LEVELS;
-        }
-    }
+        // Calcul de la position verticale du texte
+        int yPos = (int)(bounds[i].y + 15);
 
-    // Affichage du bouton "Règles du jeu"
-    DrawRectangleRec(rulesButtonBounds, BROWN);
-    DrawText("Règles du jeu", (int)(rulesButtonBounds.x + rulesButtonBounds.width / 2 - MeasureText("Règles du jeu", 20) / 2), (int)(rulesButtonBounds.y + 15), 20, BLACK);
+        DrawText(labels[i], (int)(bounds[i].x + bounds[i].width / 2 - MeasureText(labels[i], fontSize) / 2), yPos, fontSize, BLACK);
 
-    // Pointeur du bouton "Règles du jeu"
-    if (CheckCollisionPointRec(GetMousePosition(), rulesButtonBounds)) {
-        DrawRectangleLinesEx(rulesButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = RULES;
-            rulesWindow = true; // Activer la fenêtre des règles
-        }
-    }
-
-    // Affichage du bouton "Crédits"
-    DrawRectangleRec(creditsButtonBounds, BROWN);
-    DrawText("Crédits", (int)(creditsButtonBounds.x + creditsButtonBounds.width / 2 - MeasureText("Crédits", 20) / 2), (int)(creditsButtonBounds.y + 15), 20, BLACK);
-
-    // Pointeur du bouton "Crédits"
-    if (CheckCollisionPointRec(GetMousePosition(), creditsButtonBounds)) {
-        DrawRectangleLinesEx(creditsButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = CREDITS;
-        }
-    }
-    // Affichage du bouton "Classement"
-    DrawRectangleRec(rankButtonBounds, BROWN);
-    DrawText("Classement", (int)(rankButtonBounds.x + rankButtonBounds.width / 2 - MeasureText("Classement", 20) / 2), (int)(rankButtonBounds.y + 15), 20, BLACK);
-
-    // Pointeur du bouton "Crédits"
-    if (CheckCollisionPointRec(GetMousePosition(), rankButtonBounds)) {
-        DrawRectangleLinesEx(rankButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = RANK;
+        // Vérifier si la souris est sur le bouton
+        if (CheckCollisionPointRec(GetMousePosition(), bounds[i])) {
+            DrawRectangleLinesEx(bounds[i], 2, WHITE);
+            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+                if (strcmp(labels[i], "Nouvelle Partie") == 0) {
+                    gameState = LEVELS;
+                } else if (strcmp(labels[i], "Règles du jeu") == 0) {
+                    gameState = RULES;
+                    rulesWindow = true;
+                } else if (strcmp(labels[i], "Crédits") == 0) {
+                    gameState = CREDITS;
+                } else if (strcmp(labels[i], "Classement") == 0) {
+                    gameState = RANK;
+                }
+            }
         }
     }
 
     EndDrawing();
 }
 
-
-// Fonction de la page "Nouvelle Partie"
 void DrawNewGame(void) {
     BeginDrawing();
-
-
     ClearBackground(RAYWHITE);
-
-    // Affichage de l'image de fond pour les boutons de difficulté
     DrawTexture(difficultyBackgroundTexture, 0, 0, RAYWHITE);
 
-    // Affichage des boutons de "Facile"
-    DrawRectangleRec(easyButtonBounds, BROWN);
-    DrawText("Facile", (int)(easyButtonBounds.x + easyButtonBounds.width / 2 - MeasureText("Facile", 20) / 2), (int)(easyButtonBounds.y + 15), 20, BLACK);
+    // Tableaux pour les boutons et les labels correspondants
+    Rectangle bounds[] = { easyButtonBounds, intermediateButtonBounds, difficultButtonBounds, backButtonBounds };
+    const char* labels[] = { "Facile", "Intermédiaire", "Difficile", "Retour" };
 
-    // Pointeur du bouton "Facile"
-    if (CheckCollisionPointRec(GetMousePosition(), easyButtonBounds)) {
-        DrawRectangleLinesEx(easyButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
-        }
-    }
+    for (int i = 0; i < sizeof(bounds) / sizeof(bounds[0]); i++) {
+        DrawRectangleRec(bounds[i], BROWN);
 
-    // Affichage des boutons de "Intermediaire"
-    DrawRectangleRec(intermediateButtonBounds, BROWN);
-    DrawText("Intermédiaire", (int)(intermediateButtonBounds.x + intermediateButtonBounds.width / 2 - MeasureText("Intermédiaire", 20) / 2), (int)(intermediateButtonBounds.y + 15), 20, BLACK);
+        // Déterminer la taille de la police en fonction du label
+        int fontSize = (strcmp(labels[i], "Retour") == 0) ? 16 : 20;
 
-    // Pointeur du bouton "Intermédiaire"
-    if (CheckCollisionPointRec(GetMousePosition(), intermediateButtonBounds)) {
-        DrawRectangleLinesEx(intermediateButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
-        }
-    }
+        // Calculer la position verticale du texte
+        int yPos = (strcmp(labels[i], "Retour") == 0) ? (int)(bounds[i].y + 5) : (int)(bounds[i].y + 15);
 
-    // Affichage des boutons de "Difficile"
-    DrawRectangleRec(difficultButtonBounds, BROWN);
-    DrawText("Difficile", (int)(difficultButtonBounds.x + difficultButtonBounds.width / 2 - MeasureText("Difficile", 20) / 2), (int)(difficultButtonBounds.y + 15), 20, BLACK);
+        DrawText(labels[i], (int)(bounds[i].x + bounds[i].width / 2 - MeasureText(labels[i], fontSize) / 2), 
+                 yPos, fontSize, BLACK);
 
-    // Pointeur du bouton "Difficile"
-    if (CheckCollisionPointRec(GetMousePosition(), difficultButtonBounds)) {
-        DrawRectangleLinesEx(difficultButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = THEMES;
-        }
-    }    
-    // Affichage du bouton "Retour"
-    DrawRectangleRec(backButtonBounds, BROWN);
-    DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
-
-    // Pointeur du bouton "Retour"
-    if (CheckCollisionPointRec(GetMousePosition(), backButtonBounds)) {
-        DrawRectangleLinesEx(backButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = MAIN_MENU;
+        // Vérifier si la souris est sur le bouton
+        if (CheckCollisionPointRec(GetMousePosition(), bounds[i])) {
+            DrawRectangleLinesEx(bounds[i], 2, WHITE);
+            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+                if (strcmp(labels[i], "Retour") == 0) {
+                    gameState = MAIN_MENU;
+                } else {
+                    gameState = THEMES;
+                }
+            }
         }
     }
 
     EndDrawing();
 }
-
 
 // Fonction de la page "Crédits"
 void DrawCredits(void) {
@@ -560,7 +510,6 @@ void DrawCredits(void) {
             gameState = MAIN_MENU;
         }
     }
-
     EndDrawing();
 }
 
@@ -588,115 +537,46 @@ void DrawRules(void) {
     }
 }
 
-
-//Fonction de la page Themes
 const char* DrawThemes() {
     BeginDrawing();
-
     ClearBackground(RAYWHITE);
-
-    //Affichage de l'image de fond pour les thèmes
     DrawTexture(themesBackgroundTexture, 0, 0, RAYWHITE);
 
-    // Affichage du bouton animaux
-    DrawRectangleRec(animalsButtonBounds, BROWN);
-    DrawText("Animaux", (int)(animalsButtonBounds.x + animalsButtonBounds.width / 2 - MeasureText("Animaux", 20) / 2), (int)(animalsButtonBounds.y + 15), 20, BLACK);
-    const char* theme;
+    // Tableaux de boutons, de thèmes et de labels correspondants
+    Rectangle bounds[] = { animalsButtonBounds, fruitsButtonBounds, countryButtonBounds, workButtonBounds, sportsButtonBounds, colorsButtonsBounds, backButtonBounds };
+    const char* themes[] = { "animaux", "fruits", "pays", "metiers", "sports", "couleurs", "" };
+    const char* labels[] = { "Animaux", "Fruits", "Pays", "Métiers", "Sports", "Couleurs", "Retour" };
 
-    //Pointeur du bouton "Animaux"
-    if (CheckCollisionPointRec(GetMousePosition(), animalsButtonBounds)) {
-        DrawRectangleLinesEx(animalsButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = GAME;
-            theme = "animaux";
-            return theme;
-        }
-    }
+    for (int i = 0; i < sizeof(bounds) / sizeof(bounds[0]); i++) {
+        DrawRectangleRec(bounds[i], BROWN);
+        
+        // Définir la taille de la police en fonction du label
+        int fontSize = (strcmp(labels[i], "Retour") == 0) ? 16 : 20;
 
-    // Affichage du bouton fruits
-    DrawRectangleRec(fruitsButtonBounds, BROWN);
-    DrawText("Fruits", (int)(fruitsButtonBounds.x + fruitsButtonBounds.width / 2 - MeasureText("Fruits", 20) / 2), (int)(fruitsButtonBounds.y + 15), 20, BLACK);
+        // Calculer la position verticale du texte en fonction de la taille de la police
+        int yPos = (strcmp(labels[i], "Retour") == 0) ? (int)(bounds[i].y + 5) : (int)(bounds[i].y + 15);
 
-    //Pointeur du bouton "Fruits"
-    if (CheckCollisionPointRec(GetMousePosition(), fruitsButtonBounds)) {
-        DrawRectangleLinesEx(fruitsButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = GAME;
-            theme = "fruits";
-            return theme;
-        }
-    }
+        DrawText(labels[i], (int)(bounds[i].x + bounds[i].width / 2 - MeasureText(labels[i], fontSize) / 2), 
+                 yPos, fontSize, BLACK);
 
-    // Affichage du bouton pays
-    DrawRectangleRec(countryButtonBounds, BROWN);
-    DrawText("Pays", (int)(countryButtonBounds.x + countryButtonBounds.width / 2 - MeasureText("Pays", 20) / 2), (int)(countryButtonBounds.y + 15), 20, BLACK);
-
-    //Pointeur du bouton "Pays"
-    if (CheckCollisionPointRec(GetMousePosition(), countryButtonBounds)) {
-        DrawRectangleLinesEx(countryButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = GAME;
-            theme = "pays";
-            return theme;
-        }
-    }
-
-    // Affichage du bouton métiers
-    DrawRectangleRec(workButtonBounds, BROWN);
-    DrawText("Métiers", (int)(workButtonBounds.x + workButtonBounds.width / 2 - MeasureText("Métiers", 20) / 2), (int)(workButtonBounds.y + 15), 20, BLACK);
-
-    //Pointeur du bouton "métiers"
-    if (CheckCollisionPointRec(GetMousePosition(), workButtonBounds)) {
-        DrawRectangleLinesEx(workButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = GAME;
-            theme = "metiers";
-            return theme;
-        }
-    }
-
-    // Affichage du bouton Sports
-    DrawRectangleRec(sportsButtonBounds, BROWN);
-    DrawText("Sports", (int)(sportsButtonBounds.x + sportsButtonBounds.width / 2 - MeasureText("Sports", 20) / 2), (int)(sportsButtonBounds.y + 15), 20, BLACK);
-
-    //Pointeur du bouton "sports"
-    if (CheckCollisionPointRec(GetMousePosition(), sportsButtonBounds)) {
-        DrawRectangleLinesEx(sportsButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = GAME;
-            theme = "sports";
-            return theme;
-        }
-    }
-
-    // Affichage du bouton couleurs
-    DrawRectangleRec(colorsButtonsBounds, BROWN);
-    DrawText("Couleurs", (int)(colorsButtonsBounds.x + colorsButtonsBounds.width / 2 - MeasureText("Couleurs", 20) / 2), (int)(colorsButtonsBounds.y + 15), 20, BLACK);
-
-    //Pointeur du bouton "Couleurs"
-    if (CheckCollisionPointRec(GetMousePosition(), colorsButtonsBounds)) {
-        DrawRectangleLinesEx(colorsButtonsBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = GAME;
-            theme = "couleurs";
-            return theme;
-        }
-    }
-
-    // Affichage du bouton "Retour"
-    DrawRectangleRec(backButtonBounds, BROWN);
-    DrawText("Retour", (int)(backButtonBounds.x + backButtonBounds.width / 2 - MeasureText("Retour", 16) / 2), (int)(backButtonBounds.y + 5), 16, BLACK);
-
-    // Pointeur du bouton "Retour"
-    if (CheckCollisionPointRec(GetMousePosition(), backButtonBounds)) {
-        DrawRectangleLinesEx(backButtonBounds, 2, WHITE);
-        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
-            gameState = LEVELS;
+        if (CheckCollisionPointRec(GetMousePosition(), bounds[i])) {
+            DrawRectangleLinesEx(bounds[i], 2, WHITE);
+            if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+                if (strcmp(themes[i], "") == 0) {  // Si c'est le bouton "Retour"
+                    gameState = LEVELS;
+                } else {
+                    gameState = GAME;  // Sinon, passer à l'état GAME
+                }
+                return themes[i];
+            }
         }
     }
 
     EndDrawing();
+    return "";
 }
+
+
 
 void DrawRank(void) {
     BeginDrawing();
@@ -705,7 +585,6 @@ void DrawRank(void) {
     DrawTexture(rankBackgroundTexture, 0, 0, RAYWHITE);
 
     // Affichage du classement
-
     DrawText(LectureFichier(), 200, 120, 30, BLACK);
 
     // Affichage du bouton "Retour"
@@ -719,7 +598,6 @@ void DrawRank(void) {
             gameState = MAIN_MENU;
         }
     }
-
     EndDrawing();
 }
 
@@ -744,7 +622,6 @@ const char* LectureFichier() {
             exit(EXIT_FAILURE);
         }
     }      
-
     fclose(rank);
     return concatenatedLines;
 }
