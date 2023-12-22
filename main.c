@@ -3,7 +3,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <limits.h>
 
 #define LONGUEUR_MAX 1024
 #define MAX_LIGNES 5
@@ -37,7 +36,6 @@ Texture2D penduImages[7];
 
 GameState gameState = MAIN_MENU;
 bool rulesWindow = false;
-const char * difficulty;
 
 const char* animaux[] = {"lion", "tigre", "singe", "chien", "aigle", "elephant", "girafe", "chouette", "suricate", "antilope", "hirondelle", "rhinoceros", "raphicere", "rossignol", "cephalophe"};
 const char* fruits[] = {"pomme", "kiwi", "goji", "melon", "mikan","orange", "banane", "fraise", "mangue", "cerise", "groseille", "calamondin", "framboise", "nectarine", "mandarine"};
@@ -48,7 +46,7 @@ const char* couleurs[] = {"rouge", "vert", "bleu", "blanc", "noir", "marron", "o
 
 
 bool CheckVictoire(void);
-const char* TheWord(const char* theme, const char* difficulty);
+const char* TheWord(const char* theme);
 void DrawMainMenu(void);
 void DrawNewGame(void);
 void DrawCredits(void);
@@ -59,7 +57,6 @@ char HandleTextInput(void);
 void DrawRank(void);
 const char* LectureFichier();
 
-bool partieTerminee = false;
 
 int main(void) {
     // Initialisation de la fenêtre
@@ -206,6 +203,9 @@ char lettresCorrectes[26]; // Tableau pour stocker les lettres correctes (26 let
 char lettresIncorrectes[26]; // Tableau pour stocker les lettres incorrectes
 int essaisRestants = 6; // Vous pouvez ajuster cela selon le nombre d'essais que vous voulez accorder
 
+char input_lettre[2] = ""; // Modifiez la taille du tableau à 2 pour un seul caractère
+bool inputName = false;
+
 void DrawJeu(void) {
     BeginDrawing();
     Color customColor = (Color){253, 231, 190, 255};
@@ -215,8 +215,9 @@ void DrawJeu(void) {
 
     if (!motSecretChoisi) {
         // Choisissez le mot secret
-        motSecret = TheWord(DrawThemes(), difficulty);
-        //motSecret = "test";
+
+
+        motSecret = TheWord(DrawThemes());
 
         // Indiquez que le mot secret a été choisi
         motSecretChoisi = true;
@@ -243,7 +244,9 @@ void DrawJeu(void) {
             if (lettre == ' ') {
                 // Si c'est un espace, dessinez simplement un espace
                 DrawText(" ", x, 120, 20, BLACK);
-            } else {
+            }
+
+            else {
                 bool lettreDevinee = strchr(lettresCorrectes, lettre) != NULL;
 
                 if (lettreDevinee) {
@@ -257,6 +260,8 @@ void DrawJeu(void) {
                 // Mettez à jour la position pour la lettre suivante
                 x += (lettreDevinee || lettre == ' ') ? MeasureText(&lettre, 20) + 5 : MeasureText("_", 20) + 5;
             }
+
+
         }
 
         // Dessinez les lettres déjà devinées
@@ -271,8 +276,23 @@ void DrawJeu(void) {
         // Si toutes les lettres correctes ont été trouvées, le joueur a gagné
         if (CheckVictoire()) {
             DrawText("VICTOIRE", 500, 240, 20, BLACK);
+            essaisRestants = 6;
+            motSecret = NULL;
+            motSecretChoisi = false;
+            memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
+            memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
+            memset(input_lettre, '\0', sizeof(input_lettre));
+            gameState = MAIN_MENU;
+
         } else if (essaisRestants == 0) {
             DrawText("PERDU", 500, 240, 20, BLACK);
+            essaisRestants = 6;
+            motSecret = NULL;
+            motSecretChoisi = false;
+            memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
+            memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
+            memset(input_lettre, '\0', sizeof(input_lettre));
+            gameState = MAIN_MENU;
         }
     }
 
@@ -307,9 +327,6 @@ bool CheckVictoire(void) {
 
 
 
-char input_lettre[2] = ""; // Modifiez la taille du tableau à 2 pour un seul caractère
-bool inputName = false;
-
 char HandleTextInput(void) {
     DrawText("Entrez une lettre : ", 100, 300, 20, BLACK);
     DrawRectangleLines(100, 330, 40, 40, BLACK);
@@ -341,7 +358,8 @@ char HandleTextInput(void) {
 
     return '\0';
 }
-const char* TheWord(const char* theme, const char* difficulty) {
+
+const char* TheWord(const char* theme) {
     const char** word_array = NULL;
     int array_size = 0;
 
@@ -375,7 +393,6 @@ const char* TheWord(const char* theme, const char* difficulty) {
 
     return word_array[random_index];
 }
-
 
 // Fonction de la page du MENU
 void DrawMainMenu(void) {
