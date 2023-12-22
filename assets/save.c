@@ -6,8 +6,7 @@
 #include <limits.h>
 
 #define LONGUEUR_MAX 1024
-#define MAX_LIGNES 5
-#define LONGUEUR_MAX_USERNAME 10
+#define MAX_LINES 5
 
 typedef enum { MAIN_MENU, LEVELS, GAME, CREDITS, RULES, THEMES, RANK} GameState;
 
@@ -89,7 +88,6 @@ int main(void) {
     difficultyBackgroundTexture = LoadTextureFromImage(difficultyBackground);
     UnloadImage(difficultyBackground);
 
-    // Chargement de l'image de fond pour le menu de CLASSEMENT
     Image rankBackground = LoadImage("assets/score.png");
     rankBackgroundTexture = LoadTextureFromImage(rankBackground);
     UnloadImage(rankBackground);
@@ -191,8 +189,6 @@ int main(void) {
     UnloadTexture(rulesBackgroundTexture);
     UnloadTexture(themesBackgroundTexture);
     UnloadTexture(difficultyBackgroundTexture);
-    UnloadTexture(rankBackgroundTexture);
-    UnloadTexture(themesBackgroundTexture);
     UnloadMusicStream(musique);
     CloseAudioDevice();
     CloseWindow();
@@ -660,7 +656,7 @@ const char* DrawThemes() {
 void DrawRank(void) {
     BeginDrawing();
 
-    // Afficher l'image de fond pour la page "Classement"
+    // Afficher l'image de fond pour la page "Crédits"
     DrawTexture(rankBackgroundTexture, 0, 0, RAYWHITE);
 
     // Affichage du classement
@@ -686,16 +682,16 @@ const char* LectureFichier() {
 
     FILE* rank = fopen("assets/rank.txt", "r"); // Ouverture du fichier en lecture
     static char chaine[LONGUEUR_MAX]; 
-    static char concatenatedLines[MAX_LIGNES];
+    static char concatenatedLines[MAX_LINES];
     concatenatedLines[0] = '\0';
 
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < 5; i++)
     {
         if(fgets(chaine, LONGUEUR_MAX, rank) != NULL) {
-            if (chaine[0] <= '4') {
+            if (chaine[0] <= '5') {
             strcat(concatenatedLines, chaine);
             }
-            if (strlen(concatenatedLines) == MAX_LIGNES) {
+            if (strlen(concatenatedLines) == MAX_LINES) {
                 break;
             }
         }
@@ -706,4 +702,5 @@ const char* LectureFichier() {
 
     fclose(rank);
     return concatenatedLines;
+
 }
