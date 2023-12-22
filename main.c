@@ -73,7 +73,7 @@ int main(void) {
     UnloadImage(creditsBackground);
 
     // Chargement de l'image de fond des thèmes
-    Image themesBackground = LoadImage("assets/pendu7.png");
+    Image themesBackground = LoadImage("assets/theme.png");
     themesBackgroundTexture = LoadTextureFromImage(themesBackground);
     UnloadImage(themesBackground);
 
