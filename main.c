@@ -56,6 +56,7 @@ const char* DrawThemes();
 char HandleTextInput(void);
 void DrawRank(void);
 const char* LectureFichier();
+void ResetGame();
 
 
 int main(void) {
@@ -205,21 +206,14 @@ int essaisRestants = 6; // Vous pouvez ajuster cela selon le nombre d'essais que
 
 char input_lettre[2] = ""; // Modifiez la taille du tableau à 2 pour un seul caractère
 bool inputName = false;
+static bool motSecretChoisi = false;
 
 void DrawJeu(void) {
     BeginDrawing();
     Color customColor = (Color){253, 231, 190, 255};
     ClearBackground(customColor);
-
-    static bool motSecretChoisi = false;
-
     if (!motSecretChoisi) {
-        // Choisissez le mot secret
-
-
         motSecret = TheWord(DrawThemes());
-
-        // Indiquez que le mot secret a été choisi
         motSecretChoisi = true;
     }
 
@@ -260,8 +254,6 @@ void DrawJeu(void) {
                 // Mettez à jour la position pour la lettre suivante
                 x += (lettreDevinee || lettre == ' ') ? MeasureText(&lettre, 20) + 5 : MeasureText("_", 20) + 5;
             }
-
-
         }
 
         // Dessinez les lettres déjà devinées
@@ -276,23 +268,12 @@ void DrawJeu(void) {
         // Si toutes les lettres correctes ont été trouvées, le joueur a gagné
         if (CheckVictoire()) {
             DrawText("VICTOIRE", 500, 240, 20, BLACK);
-            essaisRestants = 6;
-            motSecret = NULL;
-            motSecretChoisi = false;
-            memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
-            memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
-            memset(input_lettre, '\0', sizeof(input_lettre));
-            gameState = MAIN_MENU;
+            ResetGame();
+
 
         } else if (essaisRestants == 0) {
             DrawText("PERDU", 500, 240, 20, BLACK);
-            essaisRestants = 6;
-            motSecret = NULL;
-            motSecretChoisi = false;
-            memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
-            memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
-            memset(input_lettre, '\0', sizeof(input_lettre));
-            gameState = MAIN_MENU;
+            ResetGame();
         }
     }
 
@@ -309,6 +290,17 @@ void DrawJeu(void) {
     }
     HandleTextInput();
     EndDrawing();
+}
+
+
+void ResetGame() {
+    essaisRestants = 6;
+    motSecret = NULL;
+    motSecretChoisi = false;
+    memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
+    memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
+    memset(input_lettre, '\0', sizeof(input_lettre));
+    gameState = MAIN_MENU;
 }
 
 // Fonction pour vérifier si toutes les lettres correctes ont été trouvées dans le mot secret
