@@ -22,15 +22,17 @@ Rectangle animalsButtonBounds;
 Rectangle fruitsButtonBounds;
 Rectangle countryButtonBounds;
 Rectangle workButtonBounds;
+Rectangle resetButtonsBounds;
 Rectangle sportsButtonBounds;
 Rectangle colorsButtonsBounds;
-Rectangle resetButtonsBounds;
 Texture2D backgroundTexture;
 Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
 Texture2D difficultyBackgroundTexture;
 Texture2D themesBackgroundTexture; 
 Texture2D rankBackgroundTexture;
+Texture2D test; 
+
 Texture2D penduImages[7];
 
 GameState gameState = MAIN_MENU;
@@ -228,7 +230,7 @@ void DrawJeu(void) {
         }
 
         // Dessinez le mot caché
-        //DrawText("Mot caché :", 100, 50, 20, BLACK);
+        DrawText("Mot caché :", 100, 50, 20, BLACK);
         int x = 100;
 
         for (int i = 0; i < strlen(motSecret); i++) {
@@ -291,7 +293,6 @@ void DrawJeu(void) {
     EndDrawing();
 }
 
-
 void ResetGame() {
 
     // Affichage du bouton "Rejouer"
@@ -313,7 +314,6 @@ void ResetGame() {
         }
     }
 }
-
 
 // Fonction pour vérifier si toutes les lettres correctes ont été trouvées dans le mot secret
 bool CheckVictoire(void) {
@@ -364,6 +364,7 @@ char HandleTextInput(void) {
 
     return '\0';
 }
+
 
 const char* TheWord(const char* theme) {
     const char** word_array = NULL;
