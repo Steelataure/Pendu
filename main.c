@@ -329,7 +329,6 @@ bool CheckVictoire(void) {
     return true;
 }
 
-
 char HandleTextInput(void) {
     DrawText("Entrez une lettre : ", 100, 300, 20, BLACK);
     DrawRectangleLines(100, 330, 40, 40, BLACK);
@@ -337,6 +336,23 @@ char HandleTextInput(void) {
     int key = GetKeyPressed();
 
     if (key != 0 && essaisRestants > 0) {
+        // Remappage des touches Q, W et M
+        if (key == KEY_Q) {
+            key = KEY_A;  
+        } else if (key == KEY_W) {
+            key = KEY_Z;  
+        } else if (key == KEY_M) {
+            key = KEY_COMMA;
+        }
+        // Remappage des touches A, Z et ,
+        else if (key == KEY_A) {
+            key = KEY_Q;  
+        } else if (key == KEY_Z) {
+            key = KEY_W; 
+        } else if (key == KEY_SEMICOLON) {
+            key = KEY_M; 
+        }
+
         if (key == KEY_BACKSPACE && input_lettre[0] != '\0') {
             input_lettre[0] = '\0';
         } else if ((key >= KEY_A && key <= KEY_Z) || (key >= KEY_ZERO && key <= KEY_NINE)) {
@@ -364,6 +380,7 @@ char HandleTextInput(void) {
 
     return '\0';
 }
+
 
 
 const char* TheWord(const char* theme) {
