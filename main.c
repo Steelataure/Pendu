@@ -24,14 +24,13 @@ Rectangle countryButtonBounds;
 Rectangle workButtonBounds;
 Rectangle sportsButtonBounds;
 Rectangle colorsButtonsBounds;
+Rectangle resetButtonsBounds;
 Texture2D backgroundTexture;
 Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
 Texture2D difficultyBackgroundTexture;
 Texture2D themesBackgroundTexture; 
 Texture2D rankBackgroundTexture;
-Texture2D test; 
-
 Texture2D penduImages[7];
 
 GameState gameState = MAIN_MENU;
@@ -260,7 +259,7 @@ void DrawJeu(void) {
         DrawText("Lettres devinées :", 100, 180, 20, BLACK);
         DrawText(lettresCorrectes, 100, 210, 20, BLACK);
         DrawText(lettresIncorrectes, 100, 240, 20, BLACK);
-        DrawText(motSecret, 400, 240, 20, BLACK);
+        //DrawText(motSecret, 400, 240, 20, BLACK);
 
         // Dessinez le nombre d'essais restants
         DrawText(TextFormat("Essais restants : %d", (essaisRestants > 0) ? essaisRestants : 0), 100, 270, 20, BLACK);
@@ -294,14 +293,27 @@ void DrawJeu(void) {
 
 
 void ResetGame() {
-    essaisRestants = 6;
-    motSecret = NULL;
-    motSecretChoisi = false;
-    memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
-    memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
-    memset(input_lettre, '\0', sizeof(input_lettre));
-    gameState = MAIN_MENU;
+
+    // Affichage du bouton "Rejouer"
+    resetButtonsBounds = (Rectangle){GetScreenWidth() - 70, 50, 60, 30};
+    DrawRectangleRec(resetButtonsBounds, BROWN);
+    DrawText("Rejouer", (int)(resetButtonsBounds.x + resetButtonsBounds.width / 2 - MeasureText("Rejouer", 16) / 2), (int)(resetButtonsBounds.y + 5), 16, BLACK);
+
+    // Pointeur du bouton "Rejouer"
+    if (CheckCollisionPointRec(GetMousePosition(), resetButtonsBounds)) {
+        DrawRectangleLinesEx(resetButtonsBounds, 2, WHITE);
+        if (IsMouseButtonReleased(MOUSE_LEFT_BUTTON)) {
+            essaisRestants = 6;
+            motSecret = NULL;
+            motSecretChoisi = false;
+            memset(lettresCorrectes, '\0', sizeof(lettresCorrectes));
+            memset(lettresIncorrectes, '\0', sizeof(lettresIncorrectes));
+            memset(input_lettre, '\0', sizeof(input_lettre));
+            gameState = MAIN_MENU;
+        }
+    }
 }
+
 
 // Fonction pour vérifier si toutes les lettres correctes ont été trouvées dans le mot secret
 bool CheckVictoire(void) {
