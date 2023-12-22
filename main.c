@@ -16,7 +16,6 @@ Rectangle rulesButtonBounds;
 Rectangle creditsButtonBounds;
 Rectangle backButtonBounds;
 Rectangle easyButtonBounds;
-Texture2D rankBackgroundTexture;
 Rectangle intermediateButtonBounds;
 Rectangle difficultButtonBounds;
 Rectangle animalsButtonBounds;
@@ -31,6 +30,8 @@ Texture2D creditsBackgroundTexture;
 Texture2D rulesBackgroundTexture;
 Texture2D difficultyBackgroundTexture;
 Texture2D themesBackgroundTexture; 
+Texture2D rankBackgroundTexture;
+Texture2D test; 
 Texture2D penduImages[7];
 
 GameState gameState = MAIN_MENU;
