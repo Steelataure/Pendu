@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 
 #define LONGUEUR_MAX 1024
 #define MAX_LINES 5
@@ -35,6 +36,7 @@ Texture2D penduImages[7];
 
 GameState gameState = MAIN_MENU;
 bool rulesWindow = false;
+const char * difficulty;
 
 const char* animaux[] = {"lion", "tigre", "singe", "chien", "aigle", "elephant", "girafe", "chouette", "suricate", "antilope", "hirondelle", "rhinoceros", "raphicere", "rossignol", "cephalophe"};
 const char* fruits[] = {"pomme", "kiwi", "goji", "melon", "mikan","orange", "banane", "fraise", "mangue", "cerise", "groseille", "calamondin", "framboise", "nectarine", "mandarine"};
@@ -45,7 +47,7 @@ const char* couleurs[] = {"rouge", "vert", "bleu", "blanc", "noir", "marron", "o
 
 
 bool CheckVictoire(void);
-const char* TheWord(const char* theme);
+const char* TheWord(const char* theme, const char* difficulty);
 void DrawMainMenu(void);
 void DrawNewGame(void);
 void DrawCredits(void);
@@ -209,7 +211,8 @@ void DrawJeu(void) {
 
     if (!motSecretChoisi) {
         // Choisissez le mot secret
-        motSecret = TheWord(DrawThemes());
+        motSecret = TheWord(DrawThemes(), difficulty);
+        //motSecret = "test";
 
         // Indiquez que le mot secret a été choisi
         motSecretChoisi = true;
@@ -334,8 +337,7 @@ char HandleTextInput(void) {
 
     return '\0';
 }
-
-const char* TheWord(const char* theme) {
+const char* TheWord(const char* theme, const char* difficulty) {
     const char** word_array = NULL;
     int array_size = 0;
 
@@ -369,6 +371,7 @@ const char* TheWord(const char* theme) {
 
     return word_array[random_index];
 }
+
 
 // Fonction de la page du MENU
 void DrawMainMenu(void) {
