@@ -228,7 +228,7 @@ void DrawJeu(void) {
         }
 
         // Dessinez le mot caché
-        DrawText("Mot caché :", 100, 50, 20, BLACK);
+        //DrawText("Mot caché :", 100, 50, 20, BLACK);
         int x = 100;
 
         for (int i = 0; i < strlen(motSecret); i++) {
@@ -236,7 +236,7 @@ void DrawJeu(void) {
 
             if (lettre == ' ') {
                 // Si c'est un espace, dessinez simplement un espace
-                DrawText(" ", x, 120, 20, BLACK);
+                DrawText(" ", x, 120, 22, BLACK);
             }
 
             else {
@@ -244,10 +244,10 @@ void DrawJeu(void) {
 
                 if (lettreDevinee) {
                     // Si la lettre a été devinée, dessinez la lettre
-                    DrawText(&lettre, x, 120, 20, BLACK);
+                    DrawText(&lettre, x, 120, 22, BLACK);
                 } else {
                     // Sinon, dessinez un trait souligné
-                    DrawText("_", x, 120, 20, BLACK);
+                    DrawText("_", x, 120, 22, BLACK);
                 }
 
                 // Mettez à jour la position pour la lettre suivante
@@ -266,12 +266,12 @@ void DrawJeu(void) {
 
         // Si toutes les lettres correctes ont été trouvées, le joueur a gagné
         if (CheckVictoire()) {
-            DrawText("VICTOIRE", 500, 240, 20, BLACK);
+            DrawText("VICTOIRE", GetScreenWidth()/2, 240, 60, BLACK);
             ResetGame();
 
 
         } else if (essaisRestants == 0) {
-            DrawText("PERDU", 500, 240, 20, BLACK);
+            DrawText("PERDU", GetScreenWidth()/2, 240, 60, BLACK);
             ResetGame();
         }
     }
@@ -330,14 +330,13 @@ bool CheckVictoire(void) {
 }
 
 
-
 char HandleTextInput(void) {
     DrawText("Entrez une lettre : ", 100, 300, 20, BLACK);
     DrawRectangleLines(100, 330, 40, 40, BLACK);
     DrawText(input_lettre, 110, 340, 20, BLACK);
     int key = GetKeyPressed();
 
-     if (key != 0 && essaisRestants > 0) {
+    if (key != 0 && essaisRestants > 0) {
         if (key == KEY_BACKSPACE && input_lettre[0] != '\0') {
             input_lettre[0] = '\0';
         } else if ((key >= KEY_A && key <= KEY_Z) || (key >= KEY_ZERO && key <= KEY_NINE)) {
@@ -350,12 +349,15 @@ char HandleTextInput(void) {
             strcpy(motSecretLower, motSecret);
             strlwr(motSecretLower);
 
-            // Vérifier si la lettre est dans le mot secret
-            if (strchr(motSecretLower, input_lettre[0]) != NULL) {
-                strncat(lettresCorrectes, input_lettre, 1);
-            } else {
-                strncat(lettresIncorrectes, input_lettre, 1);
-                essaisRestants--;
+            // Vérifier si la lettre a déjà été entrée
+            if (strchr(lettresCorrectes, input_lettre[0]) == NULL && strchr(lettresIncorrectes, input_lettre[0]) == NULL) {
+                // La lettre n'a pas été entrée, procéder
+                if (strchr(motSecretLower, input_lettre[0]) != NULL) {
+                    strncat(lettresCorrectes, input_lettre, 1);
+                } else {
+                    strncat(lettresIncorrectes, input_lettre, 1);
+                    essaisRestants--;
+                }
             }
         }
     }
