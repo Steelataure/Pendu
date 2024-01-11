@@ -270,7 +270,9 @@ void DrawJeu(void) {
 
         } else if (essaisRestants == 0) {
             DrawText("PERDU", GetScreenWidth()/2, 240, 60, BLACK);
+            DrawText(motSecret, 480, 300, 30, BLACK);
             ResetGame();
+
         }
     }
 
